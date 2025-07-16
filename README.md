@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DylGPT
 
-## Getting Started
+A ChatGPT-styled chat application that sends all messages via SMS using Twilio.
 
-First, run the development server:
+## Setup
 
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Create a `.env.local` file with your Twilio credentials:
+```env
+TWILIO_ACCOUNT_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_NUMBER=your_twilio_phone_number
+RECIPIENT_NUMBER=recipient_phone_number
+```
+
+3. Run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment to Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The easiest way to deploy is using the Vercel Platform:
 
-## Learn More
+1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
 
-To learn more about Next.js, take a look at the following resources:
+2. Import your project to Vercel:
+   - Go to [https://vercel.com/new](https://vercel.com/new)
+   - Import your Git repository
+   - Configure environment variables during setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Set environment variables in Vercel:
+   - `TWILIO_ACCOUNT_SID`
+   - `TWILIO_AUTH_TOKEN`
+   - `TWILIO_NUMBER`
+   - `RECIPIENT_NUMBER`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Alternatively, deploy using Vercel CLI:
+```bash
+npm i -g vercel
+vercel
+```
 
-## Deploy on Vercel
+## Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- ChatGPT-like interface
+- All messages are sent to the configured phone number via SMS
+- Real-time message status updates
+- Responsive design
+- Dark mode support
+# dylgpt
