@@ -1,19 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import twilio from 'twilio'
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID
-const authToken = process.env.TWILIO_AUTH_TOKEN
-const twilioNumber = process.env.TWILIO_NUMBER
-const recipientNumber = process.env.RECIPIENT_NUMBER
+function getTwilioConfig() {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID
+  const authToken = process.env.TWILIO_AUTH_TOKEN
+  const twilioNumber = process.env.TWILIO_NUMBER
+  const recipientNumber = process.env.RECIPIENT_NUMBER
 
-if (!accountSid || !authToken || !twilioNumber || !recipientNumber) {
-  throw new Error('Missing required environment variables: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER, RECIPIENT_NUMBER')
+  if (!accountSid || !authToken || !twilioNumber || !recipientNumber) {
+    throw new Error('Missing required environment variables: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER, RECIPIENT_NUMBER')
+  }
+
+  return { accountSid, authToken, twilioNumber, recipientNumber }
 }
-
-const client = twilio(accountSid, authToken)
 
 export async function POST(request: NextRequest) {
   try {
+    const { accountSid, authToken, twilioNumber, recipientNumber } = getTwilioConfig()
+    const client = twilio(accountSid, authToken)
     const { message, userName } = await request.json()
 
     if (!message) {
@@ -29,8 +33,8 @@ export async function POST(request: NextRequest) {
 
     const result = await client.messages.create({
       body: smsBody,
-      from: twilioNumber as string,
-      to: recipientNumber as string,
+      from: twilioNumber,
+      to: recipientNumber,
     })
 
     return NextResponse.json({ success: true, messageId: result.sid })
