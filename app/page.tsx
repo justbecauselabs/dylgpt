@@ -43,15 +43,24 @@ export default function Home() {
         }),
       });
 
+      const data = await response.json().catch(() => ({} as { error?: string; remainingDay?: number }))
+
       if (response.ok) {
+        const remaining =
+          typeof data.remainingDay === 'number'
+            ? ` (${data.remainingDay} left today)`
+            : ''
         setMessages([...newMessages, { 
           role: 'assistant' as const, 
-          content: 'Your message has been sent via SMS!' 
+          content: `Your message has been sent via SMS!${remaining}` 
         }]);
       } else {
-        throw new Error('Failed to send SMS');
+        setMessages([...newMessages, { 
+          role: 'assistant' as const, 
+          content: data.error || 'Sorry, there was an error sending your message. Please try again.' 
+        }]);
       }
-    } catch (error) {
+    } catch {
       setMessages([...newMessages, { 
         role: 'assistant' as const, 
         content: 'Sorry, there was an error sending your message. Please try again.' 

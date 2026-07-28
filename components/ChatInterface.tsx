@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { DEFAULT_MAX_USER_MESSAGE } from '@/utils/sms-cost'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -13,9 +14,12 @@ interface ChatInterfaceProps {
   isLoading: boolean
 }
 
+const MAX_MESSAGE_CHARS = DEFAULT_MAX_USER_MESSAGE
+
 export default function ChatInterface({ messages, onSendMessage, isLoading }: ChatInterfaceProps) {
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const charsLeft = MAX_MESSAGE_CHARS - input.length
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -27,8 +31,9 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (input.trim() && !isLoading) {
-      onSendMessage(input)
+    const trimmed = input.trim()
+    if (trimmed && !isLoading && trimmed.length <= MAX_MESSAGE_CHARS) {
+      onSendMessage(trimmed)
       setInput('')
     }
   }
@@ -108,7 +113,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
             <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)]">
               <textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => setInput(e.target.value.slice(0, MAX_MESSAGE_CHARS))}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault()
@@ -116,6 +121,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                   }
                 }}
                 rows={1}
+                maxLength={MAX_MESSAGE_CHARS}
                 className="m-0 w-full resize-none border-0 bg-white p-0 pr-7 focus:ring-0 focus-visible:ring-0 pl-2 md:pl-0 text-gray-900"
                 placeholder="Message DylGPT..."
                 style={{
@@ -124,9 +130,16 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                   overflowY: 'hidden'
                 }}
               />
+              <div
+                className={`absolute bottom-1.5 left-2 text-[10px] md:bottom-2.5 md:left-4 ${
+                  charsLeft <= 20 ? 'text-red-500' : 'text-gray-400'
+                }`}
+              >
+                {charsLeft}
+              </div>
               <button
                 type="submit"
-                disabled={!input.trim() || isLoading}
+                disabled={!input.trim() || isLoading || input.trim().length > MAX_MESSAGE_CHARS}
                 className="absolute p-1 rounded-md text-gray-500 bottom-1.5 md:bottom-2.5 hover:bg-gray-100 disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
               >
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg">
@@ -139,7 +152,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
         </form>
         <div className="px-3 pt-2 pb-3 text-center text-xs text-gray-600 md:px-4 md:pt-3 md:pb-6">
           <span>
-            DylGPT can make mistakes. Check important info.
+            DylGPT is cheap on purpose: short messages, rate limits, one SMS segment.
           </span>
         </div>
       </div>
