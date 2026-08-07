@@ -63,13 +63,13 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
               <div
                 key={index}
                 className={`group w-full text-gray-800 border-b border-black/10 ${
-                  message.role === 'assistant' ? 'bg-gray-50' : ''
+                  message.role === 'assistant' ? 'bg-primary-soft' : ''
                 }`}
               >
                 <div className="m-auto flex gap-4 p-4 text-base md:max-w-2xl md:gap-6 md:py-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
                   <div className="flex-shrink-0">
                     <div className={`flex h-8 w-8 items-center justify-center rounded-sm ${
-                      message.role === 'user' ? 'bg-purple-600' : 'bg-green-600'
+                      message.role === 'user' ? 'bg-primary-dark' : 'bg-primary'
                     }`}>
                       {message.role === 'user' ? (
                         <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +105,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
         <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
           <div className="relative flex h-full flex-1 md:flex-col">
             <div className="ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 md:flex md:gap-2 md:justify-center"></div>
-            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)]">
+            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] focus-within:border-primary">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -127,7 +127,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="absolute p-1 rounded-md text-gray-500 bottom-1.5 md:bottom-2.5 hover:bg-gray-100 disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
+                className="absolute p-1 rounded-md text-primary bottom-1.5 md:bottom-2.5 hover:bg-primary-soft disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
               >
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
