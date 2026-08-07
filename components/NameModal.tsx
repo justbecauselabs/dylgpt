@@ -42,13 +42,13 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
             autoFocus
             required
           />
           <button
             type="submit"
-            className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-200 font-medium"
+            className="mt-4 w-full bg-accent text-white py-2 px-4 rounded-md hover:brightness-90 transition-[filter] duration-200 font-medium"
           >
             Continue
           </button>
