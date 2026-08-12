@@ -11,7 +11,8 @@ interface Spark {
   delay: number
 }
 
-const SPARK_LIFETIME_MS = 900
+const SPARK_LIFETIME_MS = 1100
+const SPARK_COUNT = 20
 
 interface Message {
   role: 'user' | 'assistant'
@@ -40,10 +41,10 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
   }, [messages, isLoading])
 
   useEffect(() => {
-    if (!isLoading) {
-      setStepIndex(0)
-      return
-    }
+    if (!isLoading) return
+
+    // Start somewhere new each time so the concierge does not repeat his fussing.
+    setStepIndex(Math.floor(Math.random() * POLISHING_STEPS.length))
     const timer = setInterval(() => {
       setStepIndex((index) => (index + 1) % POLISHING_STEPS.length)
     }, 700)
@@ -53,12 +54,12 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
   const throwSparks = () => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    const batch: Spark[] = Array.from({ length: 14 }, () => ({
+    const batch: Spark[] = Array.from({ length: SPARK_COUNT }, () => ({
       id: sparkId.current++,
-      x: (Math.random() - 0.5) * 130,
-      y: -30 - Math.random() * 80,
+      x: (Math.random() - 0.5) * 220,
+      y: -50 - Math.random() * 130,
       rotation: (Math.random() - 0.5) * 540,
-      delay: Math.random() * 120,
+      delay: Math.random() * 140,
     }))
     setSparks((current) => [...current, ...batch])
     const expiring = new Set(batch.map((spark) => spark.id))
@@ -79,7 +80,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
   return (
     <div className="flex flex-1 flex-col h-full">
       {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center border-b border-[color:var(--gold-line)] bg-[color:var(--ink-800)]/90 pl-1 pt-1 backdrop-blur-sm md:hidden">
+      <div className="sticky top-0 z-10 flex items-center border-b-[3px] border-[color:var(--ink)] bg-[color:var(--grape-700)] pl-1 pt-1 md:hidden">
         <button className="flex items-center gap-3 p-3 text-[color:var(--gold-300)]">
           <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -93,24 +94,29 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {messages.length === 0 ? (
-          <div className="flex h-full items-center justify-center">
-            <div className="max-w-2xl px-4 text-center">
-              <div className="gilded-medallion gilded-glow mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full">
-                <svg stroke="#3a2a02" fill="none" strokeWidth="1.75" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8" xmlns="http://www.w3.org/2000/svg">
+          <div className="relative flex h-full items-center justify-center overflow-hidden">
+            <div className="gilded-rays pointer-events-none absolute left-1/2 top-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-[58%]" />
+            <div className="relative max-w-2xl px-4 text-center">
+              <div className="gilded-medallion gilded-glow gilded-glint mx-auto mb-8 flex h-24 w-24 items-center justify-center rounded-full">
+                <svg stroke="var(--ink)" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-12 w-12" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                   <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
                 </svg>
               </div>
-              <h1 className="gilded-text font-[family-name:var(--font-display)] text-5xl font-bold tracking-wide sm:text-6xl">DylGPT</h1>
-              <div className="mx-auto mt-6 flex max-w-sm items-center gap-5">
+              <h1 className="gilded-text font-[family-name:var(--font-display)] text-7xl tracking-wide sm:text-8xl">DylGPT</h1>
+              <div className="mx-auto mt-7 flex max-w-md items-center gap-4">
                 <hr className="gilded-rule flex-1" />
-                <span className="text-xs font-medium uppercase tracking-[0.35em] text-[color:var(--gold-300)]">
-                  24 Karat
+                <span className="gilded-badge -rotate-3 rounded-full px-4 py-1.5 font-[family-name:var(--font-display)] text-sm tracking-widest">
+                  100% REAL GOLD*
                 </span>
                 <hr className="gilded-rule flex-1" />
               </div>
-              <p className="mt-6 font-[family-name:var(--font-display)] text-2xl text-[color:var(--gold-200)]">How can I help you today?</p>
-              <p className="mt-6 text-sm leading-relaxed text-[color:var(--gold-300)]/60">DylGPT may be experiencing partial outages if he is Yachting, On a Date, or Trying to Deliver Company Value to ChatGPT</p>
+              <p className="mt-7 font-[family-name:var(--font-display)] text-3xl text-[color:var(--gold-200)] drop-shadow-[0_3px_0_var(--ink)]">
+                How can I help you today?
+              </p>
+              <p className="mt-6 text-base font-medium leading-relaxed text-[color:var(--gold-200)]/80">
+                *DylGPT may be experiencing partial outages if he is Yachting, On a Date, or Trying to Deliver Company Value to ChatGPT
+              </p>
             </div>
           </div>
         ) : (
@@ -120,20 +126,20 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 key={index}
                 className="m-auto w-full md:max-w-2xl lg:max-w-2xl xl:max-w-3xl"
               >
-                <div className={`gilded-panel flex gap-4 rounded-2xl p-4 text-base md:gap-6 md:p-6 ${
-                  message.role === 'assistant' ? 'gilded-panel-warm' : ''
+                <div className={`gilded-panel gilded-pop flex gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6 ${
+                  message.role === 'assistant' ? 'gilded-panel-warm gilded-glint rotate-[0.9deg]' : '-rotate-[0.9deg]'
                 }`}>
                   <div className="flex-shrink-0">
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-full ${
+                    <div className={`flex h-11 w-11 items-center justify-center rounded-full ${
                       message.role === 'user' ? 'gilded-medallion-dark' : 'gilded-medallion'
                     }`}>
                       {message.role === 'user' ? (
-                        <svg stroke="var(--gold-300)" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
+                        <svg stroke="var(--gold-300)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                           <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                       ) : (
-                        <svg stroke="#3a2a02" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
+                        <svg stroke="var(--ink)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
                           <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                           <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
                         </svg>
@@ -141,12 +147,14 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                     </div>
                   </div>
                   <div className="relative flex flex-1 flex-col">
-                    <div className={`font-[family-name:var(--font-display)] text-lg font-semibold tracking-wide ${
-                      message.role === 'user' ? 'text-[color:var(--gold-200)]' : 'gilded-text'
+                    <div className={`font-[family-name:var(--font-display)] text-xl tracking-wide ${
+                      message.role === 'user' ? 'text-[color:var(--gold-300)]' : 'text-[color:var(--ink)]'
                     }`}>
                       {message.role === 'user' ? 'You' : 'DylGPT'}
                     </div>
-                    <div className="prose mt-1 max-w-none text-[color:var(--foreground)]">
+                    <div className={`prose mt-1 max-w-none font-medium ${
+                      message.role === 'user' ? 'text-[color:var(--foreground)]' : 'text-[color:var(--ink)]'
+                    }`}>
                       {message.content}
                     </div>
                   </div>
@@ -155,25 +163,25 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
             ))}
             {isLoading && (
               <div className="m-auto w-full md:max-w-2xl lg:max-w-2xl xl:max-w-3xl">
-                <div className="gilded-panel gilded-panel-warm flex gap-4 rounded-2xl p-4 text-base md:gap-6 md:p-6">
+                <div className="gilded-panel gilded-panel-warm gilded-pop gilded-glint flex rotate-[0.9deg] gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6">
                   <div className="flex-shrink-0">
-                    <div className="gilded-medallion gilded-glow flex h-9 w-9 items-center justify-center rounded-full">
-                      <svg stroke="#3a2a02" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
+                    <div className="gilded-medallion gilded-glow flex h-11 w-11 items-center justify-center rounded-full">
+                      <svg stroke="var(--ink)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                         <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
                       </svg>
                     </div>
                   </div>
                   <div className="relative flex flex-1 flex-col">
-                    <div className="gilded-text font-[family-name:var(--font-display)] text-lg font-semibold tracking-wide">
+                    <div className="font-[family-name:var(--font-display)] text-xl tracking-wide text-[color:var(--ink)]">
                       DylGPT
                     </div>
-                    <div className="mt-1 flex items-center gap-2 text-[color:var(--gold-200)]/80">
+                    <div className="mt-1 flex items-center gap-2 font-semibold text-[color:var(--ink)]">
                       <span>{POLISHING_STEPS[stepIndex]}</span>
-                      <span className="flex gap-1">
-                        <span className="gilded-dot h-1.5 w-1.5 rounded-full bg-[color:var(--gold-300)]" />
-                        <span className="gilded-dot h-1.5 w-1.5 rounded-full bg-[color:var(--gold-300)]" style={{ animationDelay: '160ms' }} />
-                        <span className="gilded-dot h-1.5 w-1.5 rounded-full bg-[color:var(--gold-300)]" style={{ animationDelay: '320ms' }} />
+                      <span className="flex gap-1.5">
+                        <span className="gilded-dot h-2.5 w-2.5 rounded-full bg-[color:var(--ink)]" />
+                        <span className="gilded-dot h-2.5 w-2.5 rounded-full bg-[color:var(--ink)]" style={{ animationDelay: '160ms' }} />
+                        <span className="gilded-dot h-2.5 w-2.5 rounded-full bg-[color:var(--ink)]" style={{ animationDelay: '320ms' }} />
                       </span>
                     </div>
                   </div>
@@ -185,10 +193,10 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
       </div>
 
       {/* Input form */}
-      <div className="w-full border-t border-[color:var(--gold-line)] pt-2 md:border-t-0 md:pt-0">
+      <div className="w-full pt-2 md:pt-0">
         <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
           <div className="relative flex h-full flex-1 md:flex-col">
-            <div className="gilded-field relative flex w-full flex-grow flex-col rounded-2xl py-3 pl-5 pr-14">
+            <div className="gilded-field relative flex w-full flex-grow flex-col rounded-full py-4 pl-6 pr-16">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -199,7 +207,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                   }
                 }}
                 rows={1}
-                className="m-0 w-full resize-none border-0 bg-transparent p-0 text-[color:var(--gold-100)] placeholder:text-[color:var(--gold-300)]/45 focus:outline-none focus:ring-0"
+                className="m-0 w-full resize-none border-0 bg-transparent p-0 text-lg font-medium text-[color:var(--gold-100)] placeholder:text-[color:var(--gold-200)]/80 focus:outline-none focus:ring-0"
                 placeholder="Message DylGPT..."
                 style={{
                   maxHeight: '200px',
@@ -210,9 +218,9 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="gilded-button absolute bottom-2.5 right-2.5 flex h-9 w-9 items-center justify-center rounded-full"
+                className="gilded-button absolute bottom-2 right-2 flex h-12 w-12 items-center justify-center rounded-full"
               >
-                <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
+                <svg stroke="currentColor" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
                   <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
@@ -232,7 +240,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
             </div>
           </div>
         </form>
-        <div className="px-3 pt-3 pb-3 text-center text-xs tracking-wide text-[color:var(--gold-300)]/50 md:px-4 md:pb-6">
+        <div className="px-3 pt-4 pb-3 text-center text-sm font-semibold tracking-wide text-[color:var(--gold-200)]/70 md:px-4 md:pb-6">
           <span>
             DylGPT can make mistakes. The gold, however, is 24 karat.
           </span>

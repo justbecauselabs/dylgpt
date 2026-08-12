@@ -25,6 +25,7 @@ export const POLISHING_STEPS = [
   "Waking the carrier pigeon",
 ]
 
-export function pickRandom<T>(items: readonly T[]): T {
-  return items[Math.floor(Math.random() * items.length)]
+export function pickRandom<T>(items: readonly T[], avoid?: T | null): T {
+  const candidates = items.length > 1 ? items.filter((item) => item !== avoid) : items
+  return candidates[Math.floor(Math.random() * candidates.length)]
 }
