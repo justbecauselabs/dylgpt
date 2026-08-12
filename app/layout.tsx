@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DylGPT",
-  description: "Chat with DylGPT - Messages are sent via SMS",
+  title: "DylGPT · Powered by Grok",
+  description: "A focused AI chat experience powered by xAI's Grok API",
 };
 
 export default function RootLayout({
