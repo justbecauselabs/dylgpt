@@ -15,14 +15,14 @@ interface ChatInterfaceProps {
 
 export default function ChatInterface({ messages, onSendMessage, isLoading }: ChatInterfaceProps) {
   const [input, setInput] = useState('')
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
+  // Scrolling the container directly, rather than scrollIntoView on a sentinel,
+  // keeps the surrounding page from being scrolled along with it.
   useEffect(() => {
-    scrollToBottom()
+    const container = scrollRef.current
+    if (!container) return
+    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,7 +48,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto">
         {messages.length === 0 ? (
           <div className="flex h-full items-center justify-center">
             <div className="max-w-2xl px-4 text-center">
@@ -59,9 +59,9 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 </svg>
               </div>
               <h1 className="gilded-text font-[family-name:var(--font-display)] text-5xl font-bold tracking-wide sm:text-6xl">DylGPT</h1>
-              <div className="mx-auto mt-5 flex max-w-xs items-center gap-3">
+              <div className="mx-auto mt-6 flex max-w-sm items-center gap-5">
                 <hr className="gilded-rule flex-1" />
-                <span className="font-[family-name:var(--font-display)] text-[10px] uppercase tracking-[0.4em] text-[color:var(--gold-400)]">
+                <span className="text-xs font-medium uppercase tracking-[0.35em] text-[color:var(--gold-300)]">
                   24 Karat
                 </span>
                 <hr className="gilded-rule flex-1" />
@@ -78,7 +78,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 className="m-auto w-full md:max-w-2xl lg:max-w-2xl xl:max-w-3xl"
               >
                 <div className={`gilded-panel flex gap-4 rounded-2xl p-4 text-base md:gap-6 md:p-6 ${
-                  message.role === 'assistant' ? 'bg-[color:var(--ink-700)]' : ''
+                  message.role === 'assistant' ? 'gilded-panel-warm' : ''
                 }`}>
                   <div className="flex-shrink-0">
                     <div className={`flex h-9 w-9 items-center justify-center rounded-full ${
@@ -110,7 +110,6 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 </div>
               </div>
             ))}
-            <div ref={messagesEndRef} />
           </div>
         )}
       </div>
