@@ -1,8 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0906;
+  --foreground: #f4e9d2;
+
+  --gold-100: #fff8e1;
+  --gold-200: #f7e7b4;
+  --gold-300: #edd292;
+  --gold-400: #d4af37;
+  --gold-500: #b8860b;
+  --gold-600: #8a6508;
+  --gold-line: rgba(212, 175, 55, 0.28);
+  --gold-line-strong: rgba(212, 175, 55, 0.55);
+
+  --ink-900: #0b0906;
+  --ink-800: #12100b;
+  --ink-700: #1a1610;
+  --ink-600: #241f16;
 }
 
 @theme inline {
@@ -10,13 +24,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
 }
-
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 textarea {
@@ -26,4 +40,195 @@ textarea {
 .prose {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* Lamplight pooling in the corners of an otherwise dark room. */
+.gilded-room {
+  background:
+    radial-gradient(1200px 600px at 12% -10%, rgba(212, 175, 55, 0.16), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(184, 134, 11, 0.12), transparent 55%),
+    radial-gradient(700px 700px at 50% 120%, rgba(212, 175, 55, 0.08), transparent 60%),
+    var(--ink-900);
+}
+
+.gilded-text {
+  background: linear-gradient(
+    100deg,
+    var(--gold-500) 0%,
+    var(--gold-300) 20%,
+    var(--gold-100) 38%,
+    var(--gold-300) 52%,
+    var(--gold-400) 68%,
+    var(--gold-500) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gilded-sheen 6s ease-in-out infinite;
+}
+
+@keyframes gilded-sheen {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.gilded-panel {
+  background:
+    linear-gradient(180deg, rgba(255, 248, 225, 0.05) 0%, rgba(255, 248, 225, 0.01) 40%, transparent 100%),
+    var(--ink-800);
+  border: 1px solid var(--gold-line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 225, 0.12),
+    0 18px 45px -20px rgba(0, 0, 0, 0.9);
+}
+
+.gilded-rule {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-line-strong), transparent);
+}
+
+/* Polished metal: a bright bevel on top, shadow pooling at the bottom. */
+.gilded-button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--gold-300) 0%, var(--gold-400) 45%, var(--gold-500) 100%);
+  color: #241a02;
+  border: 1px solid rgba(255, 248, 225, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 240, 0.75),
+    inset 0 -2px 6px rgba(90, 62, 4, 0.45),
+    0 8px 24px -10px rgba(212, 175, 55, 0.7);
+  transition: box-shadow 200ms ease, transform 200ms ease, filter 200ms ease;
+}
+
+.gilded-button:hover:not(:disabled) {
+  filter: brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 240, 0.85),
+    inset 0 -2px 6px rgba(90, 62, 4, 0.45),
+    0 12px 32px -8px rgba(212, 175, 55, 0.85);
+}
+
+.gilded-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.gilded-button:disabled {
+  filter: grayscale(0.45) brightness(0.85);
+  opacity: 0.55;
+}
+
+/* Sweep of light travelling across the metal on hover. */
+.gilded-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 253, 240, 0.75) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 700ms ease;
+}
+
+.gilded-button:hover:not(:disabled)::after {
+  transform: translateX(120%);
+}
+
+.gilded-ghost {
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.12), rgba(212, 175, 55, 0.04));
+  border: 1px solid var(--gold-line);
+  color: var(--gold-200);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+
+.gilded-ghost:hover {
+  border-color: var(--gold-line-strong);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.08));
+  box-shadow: 0 0 24px -6px rgba(212, 175, 55, 0.55);
+}
+
+.gilded-field {
+  background: rgba(11, 9, 6, 0.75);
+  border: 1px solid var(--gold-line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 225, 0.08),
+    0 0 0 0 rgba(212, 175, 55, 0);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.gilded-field:focus-within {
+  border-color: var(--gold-line-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 225, 0.12),
+    0 0 28px -6px rgba(212, 175, 55, 0.6);
+}
+
+.gilded-medallion {
+  background: linear-gradient(145deg, var(--gold-200) 0%, var(--gold-400) 45%, var(--gold-600) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 253, 240, 0.8),
+    inset 0 -2px 4px rgba(74, 51, 3, 0.5),
+    0 6px 18px -8px rgba(212, 175, 55, 0.8);
+}
+
+.gilded-medallion-dark {
+  background: linear-gradient(145deg, #3a3227 0%, #221d15 60%, #14110c 100%);
+  border: 1px solid var(--gold-line-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 225, 0.16),
+    0 6px 18px -10px rgba(0, 0, 0, 0.9);
+}
+
+.gilded-glow {
+  animation: gilded-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes gilded-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(212, 175, 55, 0);
+  }
+  50% {
+    box-shadow: 0 0 32px -6px rgba(212, 175, 55, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gilded-text,
+  .gilded-glow {
+    animation: none;
+  }
+
+  .gilded-button::after {
+    transition: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ink-900);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid var(--ink-900);
+  background: linear-gradient(180deg, var(--gold-400), var(--gold-600));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--gold-300), var(--gold-500));
+}
+
+::selection {
+  background: rgba(212, 175, 55, 0.35);
+  color: var(--gold-100);
 }

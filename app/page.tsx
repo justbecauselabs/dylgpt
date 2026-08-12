@@ -64,13 +64,25 @@ export default function Home() {
   return (
     <>
       <NameModal isOpen={showModal} onSubmit={handleNameSubmit} />
-      <div className="flex h-screen bg-gray-50">
+      <div className="gilded-room flex h-screen">
         {/* Sidebar */}
-        <div className="hidden md:flex md:w-[260px] md:flex-col bg-gray-900">
+        <div className="hidden md:flex md:w-[280px] md:flex-col border-r border-[color:var(--gold-line)] bg-[color:var(--ink-800)]/80 backdrop-blur-sm">
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex h-full min-h-0 flex-col">
-            <div className="p-4">
-              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-white border-opacity-20 p-3 text-sm text-white transition-colors hover:bg-gray-700">
+            <div className="px-5 pt-6 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="gilded-medallion flex h-9 w-9 items-center justify-center rounded-full">
+                  <svg stroke="#3a2a02" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                  </svg>
+                </div>
+                <span className="gilded-text font-[family-name:var(--font-display)] text-2xl font-semibold tracking-wide">
+                  DylGPT
+                </span>
+              </div>
+              <hr className="gilded-rule my-5" />
+              <button className="gilded-ghost mb-2 flex w-full items-center justify-center gap-3 rounded-full p-3 text-sm font-medium tracking-wide">
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -82,6 +94,12 @@ export default function Home() {
               <nav className="flex h-full flex-col px-3 pb-3.5">
                 <div className="flex-1"></div>
               </nav>
+            </div>
+            <div className="px-5 pb-6">
+              <hr className="gilded-rule mb-4" />
+              <p className="text-center font-[family-name:var(--font-display)] text-xs uppercase tracking-[0.3em] text-[color:var(--gold-400)]/80">
+                Solid Gold Service
+              </p>
             </div>
           </div>
         </div>
