@@ -253,9 +253,9 @@ textarea {
     right: 28px;
     width: 18px;
     height: 18px;
-    background: radial-gradient(circle at 50% 50%, #fffbe6 0 35%, var(--gold-300) 55%, var(--gold-500) 100%);
+    background: radial-gradient(circle at 50% 50%, #fffbe6 0 14%, var(--gold-200) 30%, var(--gold-300) 52%, var(--gold-500) 100%);
     clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
-    filter: drop-shadow(0 0 10px rgba(255, 216, 74, 0.95));
+    filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.95)) drop-shadow(0 2px 0 rgba(180, 83, 9, 0.6));
     pointer-events: none;
     opacity: 0;
     animation: gilded-spark 1100ms cubic-bezier(0.22, 0.8, 0.3, 1) forwards;
