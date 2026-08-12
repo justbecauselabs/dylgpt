@@ -1,6 +1,17 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { POLISHING_STEPS } from '@/utils/concierge'
+
+interface Spark {
+  id: number
+  x: number
+  y: number
+  rotation: number
+  delay: number
+}
+
+const SPARK_LIFETIME_MS = 900
 
 interface Message {
   role: 'user' | 'assistant'
@@ -15,7 +26,10 @@ interface ChatInterfaceProps {
 
 export default function ChatInterface({ messages, onSendMessage, isLoading }: ChatInterfaceProps) {
   const [input, setInput] = useState('')
+  const [sparks, setSparks] = useState<Spark[]>([])
+  const [stepIndex, setStepIndex] = useState(0)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const sparkId = useRef(0)
 
   // Scrolling the container directly, rather than scrollIntoView on a sentinel,
   // keeps the surrounding page from being scrolled along with it.
@@ -23,13 +37,42 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
     const container = scrollRef.current
     if (!container) return
     container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
-  }, [messages])
+  }, [messages, isLoading])
+
+  useEffect(() => {
+    if (!isLoading) {
+      setStepIndex(0)
+      return
+    }
+    const timer = setInterval(() => {
+      setStepIndex((index) => (index + 1) % POLISHING_STEPS.length)
+    }, 700)
+    return () => clearInterval(timer)
+  }, [isLoading])
+
+  const throwSparks = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const batch: Spark[] = Array.from({ length: 14 }, () => ({
+      id: sparkId.current++,
+      x: (Math.random() - 0.5) * 130,
+      y: -30 - Math.random() * 80,
+      rotation: (Math.random() - 0.5) * 540,
+      delay: Math.random() * 120,
+    }))
+    setSparks((current) => [...current, ...batch])
+    const expiring = new Set(batch.map((spark) => spark.id))
+    setTimeout(() => {
+      setSparks((current) => current.filter((spark) => !expiring.has(spark.id)))
+    }, SPARK_LIFETIME_MS + 200)
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (input.trim() && !isLoading) {
       onSendMessage(input)
       setInput('')
+      throwSparks()
     }
   }
 
@@ -110,6 +153,33 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="m-auto w-full md:max-w-2xl lg:max-w-2xl xl:max-w-3xl">
+                <div className="gilded-panel gilded-panel-warm flex gap-4 rounded-2xl p-4 text-base md:gap-6 md:p-6">
+                  <div className="flex-shrink-0">
+                    <div className="gilded-medallion gilded-glow flex h-9 w-9 items-center justify-center rounded-full">
+                      <svg stroke="#3a2a02" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="relative flex flex-1 flex-col">
+                    <div className="gilded-text font-[family-name:var(--font-display)] text-lg font-semibold tracking-wide">
+                      DylGPT
+                    </div>
+                    <div className="mt-1 flex items-center gap-2 text-[color:var(--gold-200)]/80">
+                      <span>{POLISHING_STEPS[stepIndex]}</span>
+                      <span className="flex gap-1">
+                        <span className="gilded-dot h-1.5 w-1.5 rounded-full bg-[color:var(--gold-300)]" />
+                        <span className="gilded-dot h-1.5 w-1.5 rounded-full bg-[color:var(--gold-300)]" style={{ animationDelay: '160ms' }} />
+                        <span className="gilded-dot h-1.5 w-1.5 rounded-full bg-[color:var(--gold-300)]" style={{ animationDelay: '320ms' }} />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -147,12 +217,24 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                   <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
               </button>
+              {sparks.map((spark) => (
+                <span
+                  key={spark.id}
+                  className="gilded-spark"
+                  style={{
+                    ['--spark-x' as string]: `${spark.x}px`,
+                    ['--spark-y' as string]: `${spark.y}px`,
+                    ['--spark-rotation' as string]: `${spark.rotation}deg`,
+                    animationDelay: `${spark.delay}ms`,
+                  }}
+                />
+              ))}
             </div>
           </div>
         </form>
         <div className="px-3 pt-3 pb-3 text-center text-xs tracking-wide text-[color:var(--gold-300)]/50 md:px-4 md:pb-6">
           <span>
-            DylGPT can make mistakes. Check important info.
+            DylGPT can make mistakes. The gold, however, is 24 karat.
           </span>
         </div>
       </div>

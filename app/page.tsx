@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react'
 import ChatInterface from '@/components/ChatInterface'
 import NameModal from '@/components/NameModal'
 import { getCookie, setCookie } from '@/utils/cookies'
+import { APOLOGIES, CONFIRMATIONS, pickRandom } from '@/utils/concierge'
+
+// The concierge never rushes; it also keeps the sending state from flashing by.
+const MIN_SEND_MS = 1400
 
 export default function Home() {
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
@@ -30,7 +34,9 @@ export default function Home() {
     setIsLoading(true);
     const newMessages = [...messages, { role: 'user' as const, content: message }];
     setMessages(newMessages);
+    const startedAt = Date.now();
 
+    let reply: string;
     try {
       const response = await fetch('/api/send-sms', {
         method: 'POST',
@@ -43,22 +49,22 @@ export default function Home() {
         }),
       });
 
-      if (response.ok) {
-        setMessages([...newMessages, { 
-          role: 'assistant' as const, 
-          content: 'Your message has been sent via SMS!' 
-        }]);
-      } else {
+      if (!response.ok) {
         throw new Error('Failed to send SMS');
       }
-    } catch (error) {
-      setMessages([...newMessages, { 
-        role: 'assistant' as const, 
-        content: 'Sorry, there was an error sending your message. Please try again.' 
-      }]);
-    } finally {
-      setIsLoading(false);
+
+      reply = pickRandom(CONFIRMATIONS);
+    } catch {
+      reply = pickRandom(APOLOGIES);
     }
+
+    const remaining = MIN_SEND_MS - (Date.now() - startedAt);
+    if (remaining > 0) {
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+    }
+
+    setMessages([...newMessages, { role: 'assistant' as const, content: reply }]);
+    setIsLoading(false);
   };
 
   return (
