@@ -32,9 +32,9 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black bg-opacity-50" />
-      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-        <h2 className="text-2xl font-semibold mb-4 text-brand-strong">Welcome to DylGPT!</h2>
+      <div className="fixed inset-0 bg-brand-deep/80" />
+      <div className="relative bg-brand-strong border border-brand-border rounded-lg shadow-[0_0_30px_rgba(255,45,45,0.5)] max-w-md w-full mx-4 p-6">
+        <h2 className="text-2xl font-semibold mb-4 text-white">Welcome to DylGPT!</h2>
         <p className="text-brand-muted mb-6">Please enter your name to continue</p>
         <form onSubmit={handleSubmit}>
           <input
@@ -42,7 +42,7 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
-            className="w-full px-4 py-2 border border-brand-border rounded-md text-foreground placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            className="w-full px-4 py-2 border border-brand-border rounded-md bg-brand-deep text-white placeholder:text-brand-muted focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
             autoFocus
             required
           />

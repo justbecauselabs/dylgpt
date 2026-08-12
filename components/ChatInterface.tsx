@@ -37,7 +37,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
     <div className="flex flex-1 flex-col h-full">
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center border-b border-brand-border bg-brand-surface pl-1 pt-1 sm:pl-3 md:hidden">
-        <button className="flex items-center gap-3 p-3 text-brand">
+        <button className="flex items-center gap-3 p-3 text-white">
           <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -52,7 +52,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
         {messages.length === 0 ? (
           <div className="flex h-full items-center justify-center">
             <div className="max-w-2xl px-4 text-center">
-              <h1 className="text-3xl font-semibold text-brand-strong sm:text-4xl">DylGPT</h1>
+              <h1 className="text-3xl font-semibold text-white sm:text-4xl">DylGPT</h1>
               <p className="mt-4 text-lg text-foreground">How can I help you today?</p>
               <p className="mt-6 text-sm text-brand-muted">DylGPT may be experiencing partial outages if he is Yachting, On a Date, or Trying to Deliver Company Value to ChatGPT</p>
             </div>
@@ -105,7 +105,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
         <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
           <div className="relative flex h-full flex-1 md:flex-col">
             <div className="ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 md:flex md:gap-2 md:justify-center"></div>
-            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-brand-border bg-white rounded-md shadow-[0_0_10px_rgba(220,38,38,0.15)]">
+            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-brand-border bg-brand-strong rounded-md shadow-[0_0_18px_rgba(255,45,45,0.55)]">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -116,7 +116,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                   }
                 }}
                 rows={1}
-                className="m-0 w-full resize-none border-0 bg-white p-0 pr-7 focus:ring-0 focus-visible:ring-0 pl-2 md:pl-0 text-foreground placeholder:text-brand-muted"
+                className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 pl-2 md:pl-0 text-white placeholder:text-brand-muted"
                 placeholder="Message DylGPT..."
                 style={{
                   maxHeight: '200px',
@@ -127,7 +127,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
               <button
                 type="submit"
                 disabled={!input.trim() || isLoading}
-                className="absolute p-1 rounded-md text-brand bottom-1.5 md:bottom-2.5 hover:bg-brand-surface disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
+                className="absolute p-1 rounded-md text-white bottom-1.5 md:bottom-2.5 hover:bg-brand disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
               >
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
