@@ -7,12 +7,12 @@ type ChatMessage = {
 
 type ChatRequest = {
   messages: ChatMessage[]
-  userName: string | null
 }
 
 const XAI_API_URL = 'https://api.x.ai/v1/chat/completions'
 const MAX_MESSAGES = 50
 const MAX_MESSAGE_LENGTH = 20_000
+const MAX_CONVERSATION_LENGTH = 100_000
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -46,20 +46,20 @@ function parseChatRequest(value: unknown): ChatRequest | null {
   }
 
   const messages: ChatMessage[] = []
+  let conversationLength = 0
   for (const valueMessage of value.messages) {
     const message = parseChatMessage(valueMessage)
     if (!message) {
       return null
     }
+    conversationLength += message.content.length
+    if (conversationLength > MAX_CONVERSATION_LENGTH) {
+      return null
+    }
     messages.push(message)
   }
 
-  const userName =
-    typeof value.userName === 'string' && value.userName.trim().length > 0
-      ? value.userName.trim().slice(0, 80)
-      : null
-
-  return { messages, userName }
+  return { messages }
 }
 
 function readAssistantContent(value: unknown): string | null {
@@ -102,10 +102,6 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const nameContext = chatRequest.userName
-    ? ` The person you are speaking with is named ${chatRequest.userName}.`
-    : ''
-
   try {
     const grokResponse = await fetch(XAI_API_URL, {
       method: 'POST',
@@ -119,7 +115,7 @@ export async function POST(request: NextRequest) {
           {
             role: 'system',
             content:
-              `You are DylGPT, a direct, thoughtful AI assistant powered by Grok. Give clear, useful answers and say when you are uncertain.${nameContext}`,
+              'You are DylGPT, a direct, thoughtful AI assistant powered by Grok. Give clear, useful answers and say when you are uncertain.',
           },
           ...chatRequest.messages,
         ],

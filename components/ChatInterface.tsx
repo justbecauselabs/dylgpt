@@ -97,7 +97,8 @@ export default function ChatInterface({
         <button
           type="button"
           onClick={onNewChat}
-          className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-zinc-400 transition hover:bg-white/5 hover:text-white md:hidden"
+          disabled={isLoading}
+          className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-zinc-400 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 md:hidden"
         >
           New chat
         </button>

@@ -46,10 +46,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          messages: newMessages,
-          userName,
-        }),
+        body: JSON.stringify({ messages: newMessages }),
       })
 
       const body: unknown = await response.json()
@@ -94,7 +91,8 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setMessages([])}
-              className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-zinc-200 transition hover:bg-white/[0.07]"
+              disabled={isLoading}
+              className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-zinc-200 transition hover:bg-white/[0.07] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <span className="flex size-6 items-center justify-center rounded-md bg-white text-lg leading-none text-black">
                 +
