@@ -80,7 +80,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
   return (
     <div className="flex flex-1 flex-col h-full">
       {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center border-b-[3px] border-[color:var(--ink)] bg-[color:var(--grape-700)] pl-1 pt-1 md:hidden">
+      <div className="sticky top-0 z-10 flex items-center border-b-[3px] border-[color:var(--ink)] bg-[color:var(--steel-700)] pl-1 pt-1 md:hidden">
         <button className="flex items-center gap-3 p-3 text-[color:var(--gold-300)]">
           <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -111,10 +111,10 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 </span>
                 <hr className="gilded-rule flex-1" />
               </div>
-              <p className="mt-7 font-[family-name:var(--font-display)] text-3xl text-[color:var(--gold-200)] drop-shadow-[0_3px_0_var(--ink)]">
+              <p className="gilded-text-steel mt-7 font-[family-name:var(--font-display)] text-3xl">
                 How can I help you today?
               </p>
-              <p className="mt-6 text-base font-medium leading-relaxed text-[color:var(--gold-200)]/80">
+              <p className="mt-6 text-base font-medium leading-relaxed text-[color:var(--steel-200)]/85">
                 *DylGPT may be experiencing partial outages if he is Yachting, On a Date, or Trying to Deliver Company Value to ChatGPT
               </p>
             </div>
@@ -126,15 +126,15 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 key={index}
                 className="m-auto w-full md:max-w-2xl lg:max-w-2xl xl:max-w-3xl"
               >
-                <div className={`gilded-panel gilded-pop flex gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6 ${
-                  message.role === 'assistant' ? 'gilded-panel-warm gilded-glint rotate-[0.9deg]' : '-rotate-[0.9deg]'
+                <div className={`gilded-panel gilded-pop gilded-glint flex gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6 ${
+                  message.role === 'assistant' ? 'gilded-panel-warm rotate-[0.9deg]' : '-rotate-[0.9deg]'
                 }`}>
                   <div className="flex-shrink-0">
                     <div className={`flex h-11 w-11 items-center justify-center rounded-full ${
                       message.role === 'user' ? 'gilded-medallion-dark' : 'gilded-medallion'
                     }`}>
                       {message.role === 'user' ? (
-                        <svg stroke="var(--gold-300)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
+                        <svg stroke="var(--ink)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                           <circle cx="12" cy="7" r="4"></circle>
                         </svg>
@@ -148,13 +148,11 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                   </div>
                   <div className="relative flex flex-1 flex-col">
                     <div className={`font-[family-name:var(--font-display)] text-xl tracking-wide ${
-                      message.role === 'user' ? 'text-[color:var(--gold-300)]' : 'text-[color:var(--ink)]'
+                      message.role === 'user' ? 'text-[color:var(--steel-600)]' : 'text-[color:var(--ink)]'
                     }`}>
                       {message.role === 'user' ? 'You' : 'DylGPT'}
                     </div>
-                    <div className={`prose mt-1 max-w-none font-medium ${
-                      message.role === 'user' ? 'text-[color:var(--foreground)]' : 'text-[color:var(--ink)]'
-                    }`}>
+                    <div className="prose mt-1 max-w-none font-medium text-[color:var(--ink)]">
                       {message.content}
                     </div>
                   </div>

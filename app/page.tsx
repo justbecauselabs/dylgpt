@@ -74,7 +74,7 @@ export default function Home() {
       <NameModal isOpen={showModal} onSubmit={handleNameSubmit} />
       <div className="gilded-room flex h-screen">
         {/* Sidebar */}
-        <div className="hidden md:flex md:w-[280px] md:flex-col border-r-[4px] border-[color:var(--ink)] bg-[color:var(--grape-900)]">
+        <div className="hidden md:flex md:w-[280px] md:flex-col border-r-[4px] border-[color:var(--ink)] bg-gradient-to-b from-[color:var(--steel-700)] via-[color:var(--steel-800)] to-[color:var(--steel-900)]">
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex h-full min-h-0 flex-col">
             <div className="px-5 pt-6 pb-4">
