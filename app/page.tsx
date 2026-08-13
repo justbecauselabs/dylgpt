@@ -9,12 +9,15 @@ import { APOLOGIES, CONFIRMATIONS, pickRandom } from '@/utils/concierge'
 // The concierge never rushes; it also keeps the sending state from flashing by.
 const MIN_SEND_MS = 1400
 
+// How many recent lines the concierge remembers, so he does not repeat himself.
+const REPLY_MEMORY = 4
+
 export default function Home() {
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const lastReply = useRef<string | null>(null);
+  const recentReplies = useRef<string[]>([]);
 
   useEffect(() => {
     const storedName = getCookie('dylgpt_user');
@@ -54,11 +57,11 @@ export default function Home() {
         throw new Error('Failed to send SMS');
       }
 
-      reply = pickRandom(CONFIRMATIONS, lastReply.current);
+      reply = pickRandom(CONFIRMATIONS, recentReplies.current);
     } catch {
-      reply = pickRandom(APOLOGIES, lastReply.current);
+      reply = pickRandom(APOLOGIES, recentReplies.current);
     }
-    lastReply.current = reply;
+    recentReplies.current = [reply, ...recentReplies.current].slice(0, REPLY_MEMORY);
 
     const remaining = MIN_SEND_MS - (Date.now() - startedAt);
     if (remaining > 0) {
