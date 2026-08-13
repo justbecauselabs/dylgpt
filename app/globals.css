@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #09090b;
+  --foreground: #f4f4f5;
 }
 
 @theme inline {
@@ -16,7 +16,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
 }
 
 textarea {
@@ -25,5 +25,14 @@ textarea {
 
 .prose {
   white-space: pre-wrap;
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+* {
+  scrollbar-color: #3f3f46 transparent;
+  scrollbar-width: thin;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.2);
 }

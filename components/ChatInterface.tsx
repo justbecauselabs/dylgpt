@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -9,140 +9,215 @@ interface Message {
 
 interface ChatInterfaceProps {
   messages: Message[]
-  onSendMessage: (message: string) => void
+  onSendMessage: (message: string) => Promise<void>
+  onNewChat: () => void
   isLoading: boolean
+  userName: string | null
 }
 
-export default function ChatInterface({ messages, onSendMessage, isLoading }: ChatInterfaceProps) {
+const SUGGESTIONS = [
+  {
+    label: 'Brainstorm',
+    prompt: 'Give me five unconventional ideas for a weekend side project.',
+  },
+  {
+    label: 'Explain',
+    prompt: 'Explain a hard technical concept with a useful analogy.',
+  },
+  {
+    label: 'Write',
+    prompt: 'Help me write a concise update for my team.',
+  },
+]
+
+function GrokMark() {
+  return (
+    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white text-sm font-black text-black shadow-lg shadow-white/5">
+      G
+    </div>
+  )
+}
+
+export default function ChatInterface({
+  messages,
+  onSendMessage,
+  onNewChat,
+  isLoading,
+  userName,
+}: ChatInterfaceProps) {
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isLoading])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (input.trim() && !isLoading) {
-      onSendMessage(input)
-      setInput('')
+  useEffect(() => {
+    const textarea = textareaRef.current
+    if (!textarea) {
+      return
     }
+    textarea.style.height = '0px'
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 160)}px`
+  }, [input])
+
+  const submitMessage = (message: string) => {
+    const trimmedMessage = message.trim()
+    if (!trimmedMessage || isLoading) {
+      return
+    }
+
+    setInput('')
+    void onSendMessage(trimmedMessage)
+  }
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    submitMessage(input)
   }
 
   return (
-    <div className="flex flex-1 flex-col h-full">
-      {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center border-b border-black/10 bg-white pl-1 pt-1 sm:pl-3 md:hidden">
-        <button className="flex items-center gap-3 p-3 text-gray-600">
-          <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
+    <section className="relative flex h-full flex-col bg-[radial-gradient(circle_at_50%_-20%,rgba(70,70,85,0.28),transparent_38%)]">
+      <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/8 px-4 backdrop-blur-xl md:px-6">
+        <div className="flex items-center gap-3">
+          <div className="md:hidden">
+            <GrokMark />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm font-semibold tracking-tight">DylGPT</h1>
+              <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
+                GROK
+              </span>
+            </div>
+            <p className="text-xs text-zinc-500">grok-4-latest</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onNewChat}
+          disabled={isLoading}
+          className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-zinc-400 transition hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-40 md:hidden"
+        >
+          New chat
         </button>
-        <h1 className="flex-1 text-center text-base font-semibold">DylGPT</h1>
-      </div>
+      </header>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {messages.length === 0 ? (
-          <div className="flex h-full items-center justify-center">
-            <div className="max-w-2xl px-4 text-center">
-              <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl">DylGPT</h1>
-              <p className="mt-4 text-lg text-gray-600">How can I help you today?</p>
-              <p className="mt-6 text-sm text-gray-500">DylGPT may be experiencing partial outages if he is Yachting, On a Date, or Trying to Deliver Company Value to ChatGPT</p>
+          <div className="mx-auto flex h-full w-full max-w-3xl flex-col justify-center px-5 pb-12">
+            <div className="mb-8">
+              <GrokMark />
+            </div>
+            <p className="mb-2 text-sm font-medium text-zinc-500">
+              {userName ? `Good to see you, ${userName}.` : 'Welcome.'}
+            </p>
+            <h2 className="max-w-xl text-3xl font-semibold tracking-[-0.04em] text-zinc-100 sm:text-5xl">
+              What are we working on?
+            </h2>
+            <p className="mt-4 max-w-lg text-sm leading-6 text-zinc-500">
+              Ask for analysis, code, research, or a second opinion. Your conversation is sent
+              securely to Grok through the server.
+            </p>
+            <div className="mt-10 grid gap-2 sm:grid-cols-3">
+              {SUGGESTIONS.map((suggestion) => (
+                <button
+                  key={suggestion.label}
+                  type="button"
+                  onClick={() => submitMessage(suggestion.prompt)}
+                  className="group rounded-2xl border border-white/8 bg-white/[0.025] p-4 text-left transition hover:border-white/15 hover:bg-white/[0.05]"
+                >
+                  <span className="text-xs font-semibold text-zinc-300">
+                    {suggestion.label}
+                  </span>
+                  <span className="mt-2 block text-xs leading-5 text-zinc-600 transition group-hover:text-zinc-400">
+                    {suggestion.prompt}
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
         ) : (
-          <div className="flex flex-col pb-9">
+          <div className="mx-auto flex w-full max-w-3xl flex-col gap-7 px-5 py-8 sm:px-8">
             {messages.map((message, index) => (
               <div
-                key={index}
-                className={`group w-full text-gray-800 border-b border-black/10 ${
-                  message.role === 'assistant' ? 'bg-gray-50' : ''
-                }`}
+                key={`${message.role}-${index}`}
+                className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="m-auto flex gap-4 p-4 text-base md:max-w-2xl md:gap-6 md:py-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
-                  <div className="flex-shrink-0">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-sm ${
-                      message.role === 'user' ? 'bg-purple-600' : 'bg-green-600'
-                    }`}>
-                      {message.role === 'user' ? (
-                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                      ) : (
-                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                  <div className="relative flex flex-1 flex-col">
-                    <div className="font-semibold">
-                      {message.role === 'user' ? 'You' : 'DylGPT'}
-                    </div>
-                    <div className="prose mt-1 max-w-none">
-                      {message.content}
-                    </div>
-                  </div>
+                {message.role === 'assistant' && <GrokMark />}
+                <div
+                  className={
+                    message.role === 'user'
+                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-zinc-100 px-4 py-3 text-sm leading-6 text-zinc-950'
+                      : 'min-w-0 max-w-[calc(100%-3.25rem)] pt-1 text-sm leading-7 text-zinc-200'
+                  }
+                >
+                  <div className="prose">{message.content}</div>
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex items-center gap-4">
+                <GrokMark />
+                <div className="flex gap-1.5 pt-1" aria-label="Grok is thinking">
+                  {[0, 1, 2].map((dot) => (
+                    <span
+                      key={dot}
+                      className="size-1.5 animate-pulse rounded-full bg-zinc-500"
+                      style={{ animationDelay: `${dot * 180}ms` }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
         )}
       </div>
 
-      {/* Input form */}
-      <div className="w-full border-t bg-white pt-2 md:border-t-0 md:border-transparent md:!bg-transparent md:pt-0">
-        <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
-          <div className="relative flex h-full flex-1 md:flex-col">
-            <div className="ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 md:flex md:gap-2 md:justify-center"></div>
-            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)]">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    handleSubmit(e)
-                  }
-                }}
-                rows={1}
-                className="m-0 w-full resize-none border-0 bg-white p-0 pr-7 focus:ring-0 focus-visible:ring-0 pl-2 md:pl-0 text-gray-900"
-                placeholder="Message DylGPT..."
-                style={{
-                  maxHeight: '200px',
-                  height: '24px',
-                  overflowY: 'hidden'
-                }}
-              />
-              <button
-                type="submit"
-                disabled={!input.trim() || isLoading}
-                className="absolute p-1 rounded-md text-gray-500 bottom-1.5 md:bottom-2.5 hover:bg-gray-100 disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
-              >
-                <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-              </button>
-            </div>
-          </div>
+      <div className="shrink-0 px-4 pb-4 pt-2 sm:px-6 sm:pb-6">
+        <form
+          onSubmit={handleSubmit}
+          className="mx-auto flex max-w-3xl items-end gap-3 rounded-2xl border border-white/10 bg-[#151518] p-2 pl-4 shadow-2xl shadow-black/30 transition focus-within:border-white/20"
+        >
+          <textarea
+            ref={textareaRef}
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault()
+                submitMessage(input)
+              }
+            }}
+            rows={1}
+            className="max-h-40 min-h-10 flex-1 resize-none bg-transparent py-2 text-sm leading-6 text-zinc-100 outline-none placeholder:text-zinc-600"
+            placeholder="Ask Grok anything..."
+            aria-label="Message"
+          />
+          <button
+            type="submit"
+            disabled={!input.trim() || isLoading}
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-600"
+            aria-label="Send message"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="size-4"
+              aria-hidden="true"
+            >
+              <path d="m5 12 7-7 7 7M12 5v14" />
+            </svg>
+          </button>
         </form>
-        <div className="px-3 pt-2 pb-3 text-center text-xs text-gray-600 md:px-4 md:pt-3 md:pb-6">
-          <span>
-            DylGPT can make mistakes. Check important info.
-          </span>
-        </div>
+        <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-zinc-700">
+          Grok can make mistakes. Verify important information.
+        </p>
       </div>
-    </div>
+    </section>
   )
 }

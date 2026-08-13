@@ -1,97 +1,127 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ChatInterface from '@/components/ChatInterface'
 import NameModal from '@/components/NameModal'
 import { getCookie, setCookie } from '@/utils/cookies'
 
+type Message = {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
 export default function Home() {
-  const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [userName, setUserName] = useState<string | null>(null)
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    const storedName = getCookie('dylgpt_user');
+    const storedName = getCookie('dylgpt_user')
     if (storedName) {
-      setUserName(storedName);
+      setUserName(storedName)
     } else {
-      setShowModal(true);
+      setShowModal(true)
     }
-  }, []);
+  }, [])
 
   const handleNameSubmit = (name: string) => {
-    setCookie('dylgpt_user', name);
-    setUserName(name);
-    setShowModal(false);
-  };
+    setCookie('dylgpt_user', name)
+    setUserName(name)
+    setShowModal(false)
+  }
 
   const sendMessage = async (message: string) => {
-    setIsLoading(true);
-    const newMessages = [...messages, { role: 'user' as const, content: message }];
-    setMessages(newMessages);
+    setIsLoading(true)
+    const newMessages: Message[] = [...messages, { role: 'user', content: message }]
+    setMessages(newMessages)
 
     try {
-      const response = await fetch('/api/send-sms', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          message,
-          userName 
-        }),
-      });
+        body: JSON.stringify({ messages: newMessages }),
+      })
 
-      if (response.ok) {
-        setMessages([...newMessages, { 
-          role: 'assistant' as const, 
-          content: 'Your message has been sent via SMS!' 
-        }]);
-      } else {
-        throw new Error('Failed to send SMS');
+      const body: unknown = await response.json()
+      const responseMessage =
+        isRecord(body) && typeof body.message === 'string' ? body.message : null
+
+      if (!response.ok || !responseMessage) {
+        const errorMessage =
+          isRecord(body) && typeof body.error === 'string'
+            ? body.error
+            : 'Grok could not complete that request. Please try again.'
+        throw new Error(errorMessage)
       }
-    } catch (error) {
-      setMessages([...newMessages, { 
-        role: 'assistant' as const, 
-        content: 'Sorry, there was an error sending your message. Please try again.' 
-      }]);
+
+      setMessages([...newMessages, { role: 'assistant', content: responseMessage }])
+    } catch (error: unknown) {
+      const content =
+        error instanceof Error
+          ? error.message
+          : 'Could not reach Grok. Check your connection and try again.'
+      setMessages([...newMessages, { role: 'assistant', content }])
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
-    <>
+    <main className="h-dvh overflow-hidden bg-[#09090b] text-white">
       <NameModal isOpen={showModal} onSubmit={handleNameSubmit} />
-      <div className="flex h-screen bg-gray-50">
-        {/* Sidebar */}
-        <div className="hidden md:flex md:w-[260px] md:flex-col bg-gray-900">
-        <div className="flex h-full min-h-0 flex-col">
-          <div className="flex h-full min-h-0 flex-col">
-            <div className="p-4">
-              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-white border-opacity-20 p-3 text-sm text-white transition-colors hover:bg-gray-700">
-                <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                New chat
-              </button>
+      <div className="flex h-full">
+        <aside className="hidden w-64 shrink-0 flex-col border-r border-white/8 bg-[#0d0d0f] md:flex">
+          <div className="flex h-16 items-center gap-3 px-5">
+            <div className="flex size-8 items-center justify-center rounded-xl bg-white text-sm font-black text-black">
+              D
             </div>
-            <div className="flex-1 overflow-auto">
-              <nav className="flex h-full flex-col px-3 pb-3.5">
-                <div className="flex-1"></div>
-              </nav>
+            <div>
+              <p className="text-sm font-semibold tracking-tight">DylGPT</p>
+              <p className="text-[11px] text-zinc-500">Powered by Grok</p>
             </div>
           </div>
+          <div className="px-3 pt-3">
+            <button
+              type="button"
+              onClick={() => setMessages([])}
+              disabled={isLoading}
+              className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-zinc-200 transition hover:bg-white/[0.07] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <span className="flex size-6 items-center justify-center rounded-md bg-white text-lg leading-none text-black">
+                +
+              </span>
+              New conversation
+            </button>
+          </div>
+          <div className="mt-auto border-t border-white/8 p-4">
+            <div className="flex items-center gap-3 rounded-xl px-2 py-2">
+              <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-cyan-400 text-xs font-bold text-black">
+                {userName?.charAt(0).toUpperCase() ?? '?'}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-sm text-zinc-200">{userName ?? 'Guest'}</p>
+                <p className="text-xs text-zinc-600">Grok 4</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div className="min-w-0 flex-1">
+          <ChatInterface
+            messages={messages}
+            onSendMessage={sendMessage}
+            onNewChat={() => setMessages([])}
+            isLoading={isLoading}
+            userName={userName}
+          />
         </div>
       </div>
-
-      {/* Main content */}
-      <div className="flex flex-1 flex-col">
-        <ChatInterface messages={messages} onSendMessage={sendMessage} isLoading={isLoading} />
-      </div>
-    </div>
-    </>
-  );
+    </main>
+  )
 }
