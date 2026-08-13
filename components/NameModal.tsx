@@ -32,25 +32,34 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black bg-opacity-50" />
-      <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-        <h2 className="text-2xl font-semibold mb-4">Welcome to DylGPT!</h2>
-        <p className="text-gray-600 mb-6">Please enter your name to continue</p>
+      <div className="fixed inset-0 bg-[color:var(--steel-900)]/85 backdrop-blur-sm" />
+      <div className="gilded-panel gilded-pop relative mx-4 w-full max-w-md -rotate-1 rounded-[2rem] p-8 text-center">
+        <div className="gilded-medallion gilded-glow gilded-glint mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full">
+          <svg stroke="var(--ink)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-10 w-10" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <h2 className="gilded-text font-[family-name:var(--font-display)] text-4xl tracking-wide">Welcome to DylGPT</h2>
+        <hr className="gilded-rule my-5" />
+        <p className="mb-7 text-base font-semibold tracking-wide text-[color:var(--steel-600)]">Who is asking? Names only, no titles.</p>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            autoFocus
-            required
-          />
+          <div className="gilded-field rounded-full px-5 py-3.5">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              className="w-full border-0 bg-transparent text-center text-lg font-medium text-[color:var(--silver-100)] placeholder:text-[color:var(--silver-300)]/75 focus:outline-none focus:ring-0"
+              autoFocus
+              required
+            />
+          </div>
           <button
             type="submit"
-            className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-200 font-medium"
+            className="gilded-button mt-6 w-full rounded-full px-4 py-3.5 font-[family-name:var(--font-display)] text-2xl tracking-[0.15em]"
           >
-            Continue
+            Let&apos;s Go
           </button>
         </form>
       </div>

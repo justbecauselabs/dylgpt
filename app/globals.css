@@ -1,22 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #10141a;
+  --foreground: #eef4f8;
+
+  /* Bright reflective silver / chrome. */
+  --silver-100: #ffffff;
+  --silver-200: #edf2f7;
+  --silver-300: #ccd7e2;
+  --silver-400: #9fb0be;
+  --silver-500: #6f7d8a;
+  --silver-600: #454e57;
+
+  /* Gunmetal structure. */
+  --steel-100: #f6f9fc;
+  --steel-200: #d6dee6;
+  --steel-300: #a8b4c0;
+  --steel-400: #78848f;
+  --steel-500: #4d565f;
+  --steel-600: #333b42;
+  --steel-700: #232a30;
+  --steel-800: #171c21;
+  --steel-900: #0b0e12;
+
+  /* Cartoon ink: every shiny thing gets drawn around. */
+  --ink: #080b0e;
+
+  /* Fine grain that makes a flat fill read as brushed metal. */
+  --brush: repeating-linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.09) 0 1px,
+    rgba(0, 0, 0, 0.07) 1px 2px,
+    transparent 2px 5px
+  );
+
+  /* The same grain, cut deep enough to be read across a whole plate. */
+  --brush-deep: repeating-linear-gradient(
+    97deg,
+    rgba(255, 255, 255, 0.3) 0 1px,
+    rgba(0, 0, 0, 0.17) 1px 2px,
+    rgba(255, 255, 255, 0.1) 2px 3px,
+    transparent 3px 6px
+  );
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
 }
-
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-body), var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 textarea {
@@ -26,4 +65,422 @@ textarea {
 .prose {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* Declared as components so Tailwind utilities can still override them. */
+@layer components {
+  /* A dark machined floor with cold light raking across it. */
+  .gilded-room {
+    background:
+      var(--brush),
+      radial-gradient(780px 460px at 12% -12%, rgba(230, 240, 250, 0.14), transparent 60%),
+      radial-gradient(680px 420px at 100% 0%, rgba(207, 218, 228, 0.12), transparent 58%),
+      radial-gradient(900px 700px at 50% 125%, rgba(230, 240, 250, 0.1), transparent 62%),
+      linear-gradient(165deg, var(--steel-700) 0%, var(--steel-800) 45%, var(--steel-900) 100%);
+  }
+
+  .gilded-rays {
+    background: repeating-conic-gradient(
+      from 0deg,
+      rgba(207, 218, 228, 0.32) 0deg 5deg,
+      transparent 5deg 16deg
+    );
+    -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent 78%);
+    mask-image: radial-gradient(closest-side, #000 20%, transparent 78%);
+    animation: gilded-spin 38s linear infinite;
+  }
+
+  /* Chrome lettering: the hard stop at 50% is the reflected horizon. */
+  .gilded-text {
+    background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      var(--silver-200) 24%,
+      var(--silver-300) 44%,
+      var(--silver-500) 50%,
+      var(--silver-200) 56%,
+      #ffffff 78%,
+      var(--silver-400) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 3px var(--ink);
+    paint-order: stroke fill;
+    filter: drop-shadow(0 4px 0 var(--ink)) drop-shadow(0 9px 16px rgba(0, 0, 0, 0.7));
+  }
+
+  .gilded-text-steel {
+    background: linear-gradient(
+      180deg,
+      var(--steel-100) 0%,
+      var(--steel-200) 30%,
+      var(--steel-300) 47%,
+      var(--steel-500) 51%,
+      var(--steel-200) 57%,
+      var(--steel-100) 80%,
+      var(--steel-300) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 3px var(--ink);
+    paint-order: stroke fill;
+    filter: drop-shadow(0 4px 0 var(--ink)) drop-shadow(0 9px 16px rgba(0, 0, 0, 0.7));
+  }
+
+  /* The travelling glint that sells the metal. */
+  .gilded-glint {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gilded-glint::after {
+    content: "";
+    position: absolute;
+    inset: -40% -20%;
+    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.95) 50%, transparent 60%);
+    transform: translateX(-140%);
+    animation: gilded-sweep 3.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* Brushed pewter plate: the everyday metal. */
+  .gilded-panel {
+    background:
+      var(--brush-deep),
+      linear-gradient(
+        168deg,
+        var(--steel-200) 0%,
+        var(--steel-300) 22%,
+        var(--steel-400) 46%,
+        var(--steel-500) 52%,
+        var(--steel-300) 72%,
+        var(--steel-200) 90%,
+        var(--steel-400) 100%
+      );
+    color: var(--ink);
+    border: 3px solid var(--ink);
+    box-shadow:
+      inset 0 4px 0 rgba(255, 255, 255, 0.85),
+      inset 0 -5px 0 rgba(35, 42, 48, 0.5),
+      6px 6px 0 rgba(0, 0, 0, 0.7);
+  }
+
+  /* Assistant speaks in mirror chrome. */
+  .gilded-panel-warm {
+    background:
+      var(--brush-deep),
+      linear-gradient(
+        168deg,
+        #ffffff 0%,
+        var(--silver-200) 18%,
+        var(--silver-300) 40%,
+        var(--silver-400) 52%,
+        var(--silver-200) 70%,
+        #ffffff 88%,
+        var(--silver-300) 100%
+      );
+    color: var(--ink);
+    box-shadow:
+      inset 0 4px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -5px 0 rgba(112, 125, 138, 0.5),
+      6px 6px 0 rgba(0, 0, 0, 0.7);
+  }
+
+  .gilded-rule {
+    border: 0;
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--silver-300), #ffffff, var(--silver-300), transparent);
+  }
+
+  .gilded-button {
+    position: relative;
+    overflow: hidden;
+    background:
+      var(--brush),
+      linear-gradient(180deg, #ffffff 0%, var(--silver-200) 38%, var(--silver-400) 52%, var(--silver-300) 70%, var(--silver-500) 100%);
+    color: var(--ink);
+    border: 3px solid var(--ink);
+    box-shadow:
+      inset 0 3px 0 rgba(255, 255, 255, 1),
+      inset 0 -5px 0 rgba(69, 78, 87, 0.6),
+      0 6px 0 var(--ink),
+      0 10px 22px rgba(0, 0, 0, 0.6);
+    transition: transform 120ms ease, box-shadow 120ms ease, filter 160ms ease;
+  }
+
+  .gilded-button:hover:not(:disabled) {
+    transform: translateY(-2px) rotate(-1.5deg) scale(1.04);
+    filter: brightness(1.08);
+    box-shadow:
+      inset 0 3px 0 rgba(255, 255, 255, 1),
+      inset 0 -5px 0 rgba(69, 78, 87, 0.6),
+      0 8px 0 var(--ink),
+      0 14px 28px rgba(0, 0, 0, 0.65);
+  }
+
+  /* Squish: the shadow collapses as the button is pressed into the page. */
+  .gilded-button:active:not(:disabled) {
+    transform: translateY(4px) scale(0.96);
+    box-shadow:
+      inset 0 3px 0 rgba(255, 255, 255, 0.85),
+      inset 0 -3px 0 rgba(69, 78, 87, 0.6),
+      0 2px 0 var(--ink);
+  }
+
+  .gilded-button:disabled {
+    filter: saturate(0.25) brightness(0.8);
+    opacity: 0.75;
+  }
+
+  .gilded-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.98) 50%, transparent 62%);
+    transform: translateX(-130%);
+    transition: transform 650ms ease;
+  }
+
+  .gilded-button:hover:not(:disabled)::after {
+    transform: translateX(130%);
+  }
+
+  .gilded-ghost {
+    background:
+      var(--brush),
+      linear-gradient(180deg, var(--steel-400) 0%, var(--steel-500) 45%, var(--steel-600) 100%);
+    border: 3px solid var(--ink);
+    color: var(--silver-100);
+    box-shadow:
+      inset 0 3px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -4px 0 rgba(11, 14, 18, 0.5),
+      0 5px 0 var(--ink),
+      0 9px 18px rgba(0, 0, 0, 0.55);
+    transition: transform 140ms ease, box-shadow 140ms ease, background 160ms ease, color 160ms ease;
+  }
+
+  .gilded-ghost:hover {
+    transform: translateY(-2px) rotate(1.5deg);
+    background:
+      var(--brush),
+      linear-gradient(180deg, #ffffff 0%, var(--silver-300) 45%, var(--silver-500) 100%);
+    color: var(--ink);
+    box-shadow:
+      inset 0 3px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -4px 0 rgba(69, 78, 87, 0.55),
+      0 7px 0 var(--ink),
+      0 12px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .gilded-ghost:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 var(--ink);
+  }
+
+  /* A machined slot cut into the plate. */
+  .gilded-field {
+    background: linear-gradient(180deg, var(--steel-900) 0%, var(--steel-800) 55%, var(--steel-700) 100%);
+    border: 3px solid var(--ink);
+    box-shadow:
+      inset 0 4px 10px rgba(0, 0, 0, 0.85),
+      inset 0 -2px 0 rgba(255, 255, 255, 0.12),
+      0 5px 0 var(--ink);
+    transition: box-shadow 160ms ease, transform 160ms ease;
+  }
+
+  .gilded-field:focus-within {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 4px 10px rgba(0, 0, 0, 0.85),
+      inset 0 -2px 0 rgba(255, 255, 255, 0.16),
+      0 5px 0 var(--ink),
+      0 0 0 4px rgba(207, 218, 228, 0.55),
+      0 0 36px rgba(230, 240, 250, 0.55);
+  }
+
+  .gilded-medallion {
+    background:
+      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 1) 0 12%, transparent 42%),
+      conic-gradient(
+        from 210deg,
+        var(--silver-600) 0deg,
+        var(--silver-300) 60deg,
+        #ffffff 105deg,
+        var(--silver-400) 165deg,
+        var(--silver-600) 225deg,
+        var(--silver-200) 300deg,
+        var(--silver-600) 360deg
+      );
+    border: 3px solid var(--ink);
+    box-shadow: 0 5px 0 var(--ink), 0 9px 18px rgba(0, 0, 0, 0.6);
+  }
+
+  .gilded-medallion-dark {
+    background:
+      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.9) 0 10%, transparent 40%),
+      conic-gradient(
+        from 210deg,
+        var(--steel-700) 0deg,
+        var(--steel-400) 60deg,
+        var(--steel-100) 105deg,
+        var(--steel-500) 165deg,
+        var(--steel-700) 225deg,
+        var(--steel-300) 300deg,
+        var(--steel-700) 360deg
+      );
+    border: 3px solid var(--ink);
+    box-shadow: 0 5px 0 var(--ink), 0 9px 18px rgba(0, 0, 0, 0.6);
+  }
+
+  .gilded-badge {
+    background:
+      var(--brush),
+      linear-gradient(180deg, #ffffff 0%, var(--silver-300) 45%, var(--silver-500) 100%);
+    color: var(--ink);
+    border: 3px solid var(--ink);
+    box-shadow:
+      inset 0 3px 0 rgba(255, 255, 255, 0.95),
+      0 4px 0 var(--ink),
+      0 8px 16px rgba(0, 0, 0, 0.55);
+  }
+
+  .gilded-glow {
+    animation: gilded-bob 2.6s ease-in-out infinite;
+  }
+
+  .gilded-pop {
+    animation: gilded-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .gilded-dot {
+    display: inline-block;
+    animation: gilded-bounce 900ms ease-in-out infinite;
+  }
+
+  /* Star-shaped chips thrown off the send button. */
+  .gilded-spark {
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 50% 50%, #ffffff 0 16%, var(--silver-200) 32%, var(--silver-300) 54%, var(--silver-500) 100%);
+    clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+    filter: drop-shadow(0 0 8px rgba(230, 240, 250, 0.95)) drop-shadow(0 2px 0 rgba(69, 78, 87, 0.6));
+    pointer-events: none;
+    opacity: 0;
+    animation: gilded-spark 1100ms cubic-bezier(0.22, 0.8, 0.3, 1) forwards;
+  }
+}
+
+@keyframes gilded-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gilded-sweep {
+  0%,
+  55% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(140%);
+  }
+}
+
+@keyframes gilded-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(4deg);
+  }
+}
+
+@keyframes gilded-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) translateY(12px) rotate(-2deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.04) translateY(-3px) rotate(0.6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes gilded-bounce {
+  0%,
+  70%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    transform: translateY(-6px) scale(1.25);
+  }
+}
+
+@keyframes gilded-spark {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2) rotate(0deg);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(calc(var(--spark-x) * 0.18), calc(var(--spark-y) * 0.3)) scale(1.35) rotate(45deg);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--spark-x), var(--spark-y)) scale(0.7) rotate(var(--spark-rotation));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gilded-glint::after,
+  .gilded-rays,
+  .gilded-glow,
+  .gilded-pop,
+  .gilded-dot,
+  .gilded-spark {
+    animation: none;
+  }
+
+  .gilded-spark {
+    display: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--steel-900);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 3px solid var(--steel-900);
+  background: linear-gradient(180deg, #ffffff, var(--silver-300) 45%, var(--silver-500) 55%, var(--silver-600));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffffff, var(--steel-200) 45%, var(--steel-400) 55%, var(--steel-500));
+}
+
+::selection {
+  background: var(--silver-300);
+  color: var(--ink);
 }

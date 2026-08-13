@@ -1,15 +1,23 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import ChatInterface from '@/components/ChatInterface'
 import NameModal from '@/components/NameModal'
 import { getCookie, setCookie } from '@/utils/cookies'
+import { APOLOGIES, CONFIRMATIONS, pickRandom } from '@/utils/concierge'
+
+// The concierge never rushes; it also keeps the sending state from flashing by.
+const MIN_SEND_MS = 1400
+
+// How many recent lines the concierge remembers, so he does not repeat himself.
+const REPLY_MEMORY = 4
 
 export default function Home() {
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const recentReplies = useRef<string[]>([]);
 
   useEffect(() => {
     const storedName = getCookie('dylgpt_user');
@@ -30,7 +38,9 @@ export default function Home() {
     setIsLoading(true);
     const newMessages = [...messages, { role: 'user' as const, content: message }];
     setMessages(newMessages);
+    const startedAt = Date.now();
 
+    let reply: string;
     try {
       const response = await fetch('/api/send-sms', {
         method: 'POST',
@@ -43,34 +53,47 @@ export default function Home() {
         }),
       });
 
-      if (response.ok) {
-        setMessages([...newMessages, { 
-          role: 'assistant' as const, 
-          content: 'Your message has been sent via SMS!' 
-        }]);
-      } else {
+      if (!response.ok) {
         throw new Error('Failed to send SMS');
       }
-    } catch (error) {
-      setMessages([...newMessages, { 
-        role: 'assistant' as const, 
-        content: 'Sorry, there was an error sending your message. Please try again.' 
-      }]);
-    } finally {
-      setIsLoading(false);
+
+      reply = pickRandom(CONFIRMATIONS, recentReplies.current);
+    } catch {
+      reply = pickRandom(APOLOGIES, recentReplies.current);
     }
+    recentReplies.current = [reply, ...recentReplies.current].slice(0, REPLY_MEMORY);
+
+    const remaining = MIN_SEND_MS - (Date.now() - startedAt);
+    if (remaining > 0) {
+      await new Promise((resolve) => setTimeout(resolve, remaining));
+    }
+
+    setMessages([...newMessages, { role: 'assistant' as const, content: reply }]);
+    setIsLoading(false);
   };
 
   return (
     <>
       <NameModal isOpen={showModal} onSubmit={handleNameSubmit} />
-      <div className="flex h-screen bg-gray-50">
+      <div className="gilded-room flex h-screen">
         {/* Sidebar */}
-        <div className="hidden md:flex md:w-[260px] md:flex-col bg-gray-900">
+        <div className="hidden md:flex md:w-[280px] md:flex-col border-r-[4px] border-[color:var(--ink)] bg-gradient-to-b from-[color:var(--steel-700)] via-[color:var(--steel-800)] to-[color:var(--steel-900)]">
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex h-full min-h-0 flex-col">
-            <div className="p-4">
-              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-white border-opacity-20 p-3 text-sm text-white transition-colors hover:bg-gray-700">
+            <div className="px-5 pt-6 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="gilded-medallion gilded-glint flex h-11 w-11 items-center justify-center rounded-full">
+                  <svg stroke="var(--ink)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                  </svg>
+                </div>
+                <span className="gilded-text font-[family-name:var(--font-display)] text-3xl tracking-wide">
+                  DylGPT
+                </span>
+              </div>
+              <hr className="gilded-rule my-5" />
+              <button className="gilded-ghost mb-2 flex w-full items-center justify-center gap-3 rounded-full p-3 font-[family-name:var(--font-display)] text-lg tracking-wide">
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -82,6 +105,12 @@ export default function Home() {
               <nav className="flex h-full flex-col px-3 pb-3.5">
                 <div className="flex-1"></div>
               </nav>
+            </div>
+            <div className="px-5 pb-6">
+              <hr className="gilded-rule mb-4" />
+              <p className="gilded-badge mx-auto w-fit -rotate-2 rounded-full px-4 py-1.5 text-center font-[family-name:var(--font-display)] text-sm tracking-widest">
+                Solid Silver Service
+              </p>
             </div>
           </div>
         </div>
