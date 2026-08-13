@@ -2,7 +2,7 @@ export const CONFIRMATIONS = [
   "Delivered. Your message was carried to Dylan's phone on a small velvet pillow.",
   "Sent. Dylan's phone buzzed in a tasteful, expensive way.",
   "Dispatched via SMS. First class, window seat, warm nuts.",
-  "Your words have been gold-leafed and texted. The leftover flakes are yours to keep.",
+  "Your words have been chrome-plated and texted. The leftover shavings are yours to keep.",
   "Transmitted. Somewhere, a butler nodded once and said nothing.",
   "Sent. Dylan will be notified between yacht stops.",
   "Delivered. We took the liberty of pressing your message before sending it.",
@@ -10,7 +10,7 @@ export const CONFIRMATIONS = [
 ]
 
 export const APOLOGIES = [
-  "The message did not go through. Our gold-plated carrier pigeon has requested a break. Please try again.",
+  "The message did not go through. Our chrome-plated carrier pigeon has requested a break. Please try again.",
   "Delivery failed. A butler dropped the tray. He has been spoken to. Try again.",
   "Not sent. The concierge line is currently buffing itself. Please resend shortly.",
   "Something went wrong on the way out. Your message is fine; the messenger is not.",
@@ -18,7 +18,7 @@ export const APOLOGIES = [
 
 export const POLISHING_STEPS = [
   "Polishing your message",
-  "Applying gold leaf",
+  "Buffing out a scratch",
   "Consulting the concierge",
   "Buffing to a mirror finish",
   "Selecting a suitable envelope",

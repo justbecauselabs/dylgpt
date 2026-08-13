@@ -50,7 +50,7 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
-              className="w-full border-0 bg-transparent text-center text-lg font-medium text-[color:var(--gold-100)] placeholder:text-[color:var(--gold-200)]/75 focus:outline-none focus:ring-0"
+              className="w-full border-0 bg-transparent text-center text-lg font-medium text-[color:var(--silver-100)] placeholder:text-[color:var(--silver-300)]/75 focus:outline-none focus:ring-0"
               autoFocus
               required
             />

@@ -109,7 +109,7 @@ export default function Home() {
             <div className="px-5 pb-6">
               <hr className="gilded-rule mb-4" />
               <p className="gilded-badge mx-auto w-fit -rotate-2 rounded-full px-4 py-1.5 text-center font-[family-name:var(--font-display)] text-sm tracking-widest">
-                Solid Gold Service
+                Solid Silver Service
               </p>
             </div>
           </div>

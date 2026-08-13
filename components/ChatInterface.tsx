@@ -81,7 +81,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
     <div className="flex flex-1 flex-col h-full">
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center border-b-[3px] border-[color:var(--ink)] bg-[color:var(--steel-700)] pl-1 pt-1 md:hidden">
-        <button className="flex items-center gap-3 p-3 text-[color:var(--gold-300)]">
+        <button className="flex items-center gap-3 p-3 text-[color:var(--silver-300)]">
           <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" xmlns="http://www.w3.org/2000/svg">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -107,7 +107,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
               <div className="mx-auto mt-7 flex max-w-md items-center gap-4">
                 <hr className="gilded-rule flex-1" />
                 <span className="gilded-badge -rotate-3 rounded-full px-4 py-1.5 font-[family-name:var(--font-display)] text-sm tracking-widest">
-                  100% REAL GOLD*
+                  100% SOLID SILVER*
                 </span>
                 <hr className="gilded-rule flex-1" />
               </div>
@@ -126,7 +126,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 key={index}
                 className="m-auto w-full md:max-w-2xl lg:max-w-2xl xl:max-w-3xl"
               >
-                <div className={`gilded-panel gilded-pop gilded-glint flex gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6 ${
+                <div className={`gilded-panel gilded-pop flex gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6 ${
                   message.role === 'assistant' ? 'gilded-panel-warm rotate-[0.9deg]' : '-rotate-[0.9deg]'
                 }`}>
                   <div className="flex-shrink-0">
@@ -161,7 +161,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
             ))}
             {isLoading && (
               <div className="m-auto w-full md:max-w-2xl lg:max-w-2xl xl:max-w-3xl">
-                <div className="gilded-panel gilded-panel-warm gilded-pop gilded-glint flex rotate-[0.9deg] gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6">
+                <div className="gilded-panel gilded-panel-warm gilded-pop flex rotate-[0.9deg] gap-4 rounded-3xl p-4 text-base md:gap-6 md:p-6">
                   <div className="flex-shrink-0">
                     <div className="gilded-medallion gilded-glow flex h-11 w-11 items-center justify-center rounded-full">
                       <svg stroke="var(--ink)" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
@@ -205,7 +205,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                   }
                 }}
                 rows={1}
-                className="m-0 w-full resize-none border-0 bg-transparent p-0 text-lg font-medium text-[color:var(--gold-100)] placeholder:text-[color:var(--gold-200)]/80 focus:outline-none focus:ring-0"
+                className="m-0 w-full resize-none border-0 bg-transparent p-0 text-lg font-medium text-[color:var(--silver-100)] placeholder:text-[color:var(--silver-300)]/80 focus:outline-none focus:ring-0"
                 placeholder="Message DylGPT..."
                 style={{
                   maxHeight: '200px',
@@ -238,9 +238,9 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
             </div>
           </div>
         </form>
-        <div className="px-3 pt-4 pb-3 text-center text-sm font-semibold tracking-wide text-[color:var(--gold-200)]/70 md:px-4 md:pb-6">
+        <div className="px-3 pt-4 pb-3 text-center text-sm font-semibold tracking-wide text-[color:var(--silver-300)]/70 md:px-4 md:pb-6">
           <span>
-            DylGPT can make mistakes. The gold, however, is 24 karat.
+            DylGPT can make mistakes. The chrome, however, is flawless.
           </span>
         </div>
       </div>
