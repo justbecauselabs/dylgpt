@@ -1,24 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7ecd2;
-  --foreground: #2e2405;
+  --background: #241f04;
+  --foreground: #faf5e2;
 
-  --surface-panel: #fdf7e8;
-  --surface-band: #efdcb4;
-  --surface-chrome: #e8d6a8;
-  --border: #c9ab63;
-  --muted: #6f5a1c;
+  --surface-panel: #3d3409;
+  --surface-band: #2f2806;
+  --surface-chrome: #161302;
+  --border: #5f5211;
+  --muted: #cfc084;
 
-  --brand: #bf8f14;
-  --brand-hover: #d4a428;
-  --brand-ink: #2e2405;
+  --brand: #ecc61c;
+  --brand-hover: #f7da4e;
+  --brand-ink: #241f04;
 
-  --chip-user: #9e740a;
-  --chip-bot: #3a2c05;
-  --chip-ink: #fdf7e8;
+  --chip-user: #ecc61c;
+  --chip-user-ink: #241f04;
+  --chip-bot: #8a7714;
+  --chip-bot-ink: #faf5e2;
 
-  --scrim: #2e2405;
+  --scrim: #0d0b01;
 }
 
 @theme inline {
@@ -33,8 +34,9 @@
   --color-brand-hover: var(--brand-hover);
   --color-brand-ink: var(--brand-ink);
   --color-chip-user: var(--chip-user);
+  --color-chip-user-ink: var(--chip-user-ink);
   --color-chip-bot: var(--chip-bot);
-  --color-chip-ink: var(--chip-ink);
+  --color-chip-bot-ink: var(--chip-bot-ink);
   --color-scrim: var(--scrim);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
