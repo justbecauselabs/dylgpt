@@ -105,7 +105,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
         <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
           <div className="relative flex h-full flex-1 md:flex-col">
             <div className="ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 md:flex md:gap-2 md:justify-center"></div>
-            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-brand-border bg-brand-strong rounded-md shadow-[0_0_16px_rgba(207,32,32,0.35)]">
+            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-brand-border bg-brand-strong rounded-md shadow-[0_0_16px_rgba(194,94,18,0.35)]">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
