@@ -3,6 +3,10 @@ import twilio from 'twilio'
 
 export async function POST(request: NextRequest) {
   try {
+    // Read Twilio config and construct the client inside the handler (not at
+    // module scope) so `next build` doesn't evaluate it. Hoisting this out
+    // makes the build fail during "Collecting page data" when the env vars
+    // aren't present in the deployment environment.
     const accountSid = process.env.TWILIO_ACCOUNT_SID
     const authToken = process.env.TWILIO_AUTH_TOKEN
     const twilioNumber = process.env.TWILIO_NUMBER
