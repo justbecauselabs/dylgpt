@@ -69,15 +69,15 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 <div className="m-auto flex gap-4 p-4 text-base md:max-w-2xl md:gap-6 md:py-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
                   <div className="flex-shrink-0">
                     <div className={`flex h-8 w-8 items-center justify-center rounded-sm ${
-                      message.role === 'user' ? 'bg-brand' : 'bg-brand-alt'
+                      message.role === 'user' ? 'bg-chip-user' : 'bg-chip-bot'
                     }`}>
                       {message.role === 'user' ? (
-                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-brand-ink" xmlns="http://www.w3.org/2000/svg">
+                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-chip-ink" xmlns="http://www.w3.org/2000/svg">
                           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                           <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                       ) : (
-                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-brand-alt-ink" xmlns="http://www.w3.org/2000/svg">
+                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-chip-ink" xmlns="http://www.w3.org/2000/svg">
                           <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                           <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
                         </svg>
