@@ -69,7 +69,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                 <div className="m-auto flex gap-4 p-4 text-base md:max-w-2xl md:gap-6 md:py-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
                   <div className="flex-shrink-0">
                     <div className={`flex h-8 w-8 items-center justify-center rounded-sm ${
-                      message.role === 'user' ? 'bg-brand' : 'bg-brand-strong'
+                      message.role === 'user' ? 'bg-brand' : 'bg-brand-alt'
                     }`}>
                       {message.role === 'user' ? (
                         <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +105,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
         <form onSubmit={handleSubmit} className="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6">
           <div className="relative flex h-full flex-1 md:flex-col">
             <div className="ml-1 mt-1.5 md:w-full md:m-auto md:mb-2 md:flex md:gap-2 md:justify-center"></div>
-            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-brand-border bg-brand-strong rounded-md shadow-[0_0_18px_rgba(255,45,45,0.55)]">
+            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-brand-border bg-brand-strong rounded-md shadow-[0_0_16px_rgba(207,32,32,0.35)]">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
