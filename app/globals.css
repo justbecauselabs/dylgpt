@@ -5,7 +5,8 @@
   --foreground: #ffffff;
 
   --brand: #cf2020;
-  --brand-alt: #9c1b1b;
+  --brand-alt: #dd9c9c;
+  --brand-alt-ink: #160303;
   --brand-hover: #e93b3b;
   --brand-strong: #6b1414;
   --brand-deep: #160303;
@@ -19,6 +20,7 @@
   --color-foreground: var(--foreground);
   --color-brand: var(--brand);
   --color-brand-alt: var(--brand-alt);
+  --color-brand-alt-ink: var(--brand-alt-ink);
   --color-brand-hover: var(--brand-hover);
   --color-brand-strong: var(--brand-strong);
   --color-brand-deep: var(--brand-deep);

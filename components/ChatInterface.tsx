@@ -77,7 +77,7 @@ export default function ChatInterface({ messages, onSendMessage, isLoading }: Ch
                           <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                       ) : (
-                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg">
+                        <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-brand-alt-ink" xmlns="http://www.w3.org/2000/svg">
                           <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                           <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
                         </svg>
