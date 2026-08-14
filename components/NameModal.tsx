@@ -33,7 +33,7 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-scrim/70" />
-      <div className="relative bg-surface-panel border border-border rounded-lg shadow-[0_0_30px_rgba(236,198,28,0.15)] max-w-md w-full mx-4 p-6">
+      <div className="relative bg-surface-panel border border-border rounded-lg shadow-[0_0_30px_rgba(64,208,106,0.15)] max-w-md w-full mx-4 p-6">
         <h2 className="text-2xl font-semibold mb-4 text-foreground">Welcome to DylGPT!</h2>
         <p className="text-muted mb-6">Please enter your name to continue</p>
         <form onSubmit={handleSubmit}>
