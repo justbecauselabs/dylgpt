@@ -35,8 +35,8 @@ export default function NameModal({ isOpen, onSubmit }: NameModalProps) {
       <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md" />
       {/* The outer surface is the metal rim; the inner panel stays near-white
           so the copy keeps its contrast. */}
-      <div className="chrome-surface chrome-bevel chrome-modal-in relative mx-4 w-full max-w-md rounded-3xl p-px">
-        <div className="rounded-[23px] bg-white/90 p-6 backdrop-blur-sm">
+      <div className="chrome-surface-rim chrome-bevel chrome-modal-in relative mx-4 w-full max-w-md rounded-3xl p-[3px]">
+        <div className="rounded-[21px] bg-white/90 p-6 backdrop-blur-sm">
           <h2 className="chrome-text mb-4 text-3xl font-semibold tracking-tight">Welcome to DylGPT!</h2>
           <p className="text-gray-600 mb-6">Please enter your name to continue</p>
           <form onSubmit={handleSubmit}>

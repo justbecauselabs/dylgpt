@@ -17,6 +17,21 @@
     #ffffff 100%
   );
 
+  /* Display type needs a dark band below the horizon line, otherwise the
+     lighter surface gradient leaves the glyphs unreadable on a pale page. */
+  --gradient-chrome-text: linear-gradient(
+    180deg,
+    #6d7884 0%,
+    #d9e0e6 14%,
+    #ffffff 30%,
+    #9aa5b1 46%,
+    #2b313a 52%,
+    #4d5661 62%,
+    #7f8a97 76%,
+    #cbd3da 90%,
+    #616b77 100%
+  );
+
   --gradient-chrome-dark: linear-gradient(
     180deg,
     #3a3f47 0%,
@@ -61,11 +76,16 @@ textarea {
 /* The page sits on brushed silver so the chrome surfaces above it have
    something to reflect against. */
 .chrome-page {
-  background-color: #e8ebee;
+  background-color: #dfe4ea;
   background-image:
-    radial-gradient(120% 80% at 50% -10%, #ffffff 0%, rgba(255, 255, 255, 0) 55%),
-    radial-gradient(90% 60% at 50% 110%, #ffffff 0%, rgba(255, 255, 255, 0) 60%),
-    linear-gradient(180deg, #f4f6f8 0%, #dfe4e9 50%, #eef1f4 100%);
+    linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0) 28%,
+      rgba(255, 255, 255, 0.8) 46%,
+      rgba(255, 255, 255, 0) 64%
+    ),
+    radial-gradient(120% 80% at 50% -20%, #ffffff 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg, #f1f4f7 0%, #d5dce3 46%, #eaeef2 74%, #ccd4dc 100%);
 }
 
 .chrome-surface {
@@ -74,6 +94,21 @@ textarea {
 
 .chrome-surface-dark {
   background-image: var(--gradient-chrome-dark);
+}
+
+/* A frame needs more contrast than a fill, or it vanishes into a white
+   panel at only a few pixels wide. */
+.chrome-surface-rim {
+  background-image: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #d3dade 16%,
+    #8b95a1 36%,
+    #4e5761 52%,
+    #99a3ad 66%,
+    #dfe4e9 86%,
+    #ffffff 100%
+  );
 }
 
 .chrome-bevel {
@@ -95,8 +130,7 @@ textarea {
 }
 
 .chrome-text {
-  background-image: var(--gradient-chrome);
-  -webkit-background-clip: text;
+  background-image: var(--gradient-chrome-text);
   background-clip: text;
   color: transparent;
   filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.9))
@@ -113,17 +147,22 @@ textarea {
       rgba(255, 255, 255, 0.95) 50%,
       rgba(255, 255, 255, 0) 58%
     ),
-    var(--gradient-chrome);
+    var(--gradient-chrome-text);
   background-size: 250% 100%, 100% 100%;
   background-position: 150% 0, 0 0;
   animation: chrome-text-sweep 4.5s ease-in-out 1s infinite;
 }
 
 .glass {
-  background-color: rgba(255, 255, 255, 0.62);
-  backdrop-filter: blur(14px) saturate(180%);
-  -webkit-backdrop-filter: blur(14px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  background-color: rgba(255, 255, 255, 0.5);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0) 45%
+  );
+  backdrop-filter: blur(18px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-top-color: rgba(255, 255, 255, 1);
 }
 
 /* A specular highlight that travels across the surface. `.chrome-sheen`
@@ -182,7 +221,8 @@ textarea {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     inset 0 -1px 0 rgba(15, 23, 42, 0.18),
-    0 0 0 3px rgba(148, 163, 184, 0.5),
+    0 0 0 4px rgba(100, 116, 139, 0.35),
+    0 0 24px rgba(148, 163, 184, 0.7),
     0 12px 30px -12px rgba(15, 23, 42, 0.5);
 }
 
