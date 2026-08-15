@@ -71,7 +71,7 @@ export default function Home() {
           <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-white/50 via-white/10 to-white/40" />
           <div className="flex h-full min-h-0 flex-col">
             <div className="px-4 pt-5">
-              <span className="chrome-text text-lg font-semibold tracking-tight">DylGPT</span>
+              <span className="chrome-text chrome-text-light text-lg font-semibold tracking-tight">DylGPT</span>
             </div>
             <div className="p-4">
               <button className="chrome-surface chrome-bevel chrome-sheen mb-2 flex w-full items-center justify-center gap-3 rounded-full p-3 text-sm font-medium text-gray-900 transition-transform duration-150 hover:-translate-y-px active:translate-y-0">

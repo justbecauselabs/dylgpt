@@ -100,14 +100,24 @@ textarea {
    panel at only a few pixels wide. */
 .chrome-surface-rim {
   background-image: linear-gradient(
+    145deg,
+    #c9d0d7 0%,
+    #ffffff 12%,
+    #7d8792 30%,
+    #454d57 48%,
+    #9aa4ae 62%,
+    #ffffff 80%,
+    #a8b1ba 100%
+  );
+}
+
+/* Chrome lettering needs a mid-tone behind it; on pure white the light half
+   of each glyph disappears. */
+.chrome-panel {
+  background-image: linear-gradient(
     180deg,
-    #ffffff 0%,
-    #d3dade 16%,
-    #8b95a1 36%,
-    #4e5761 52%,
-    #99a3ad 66%,
-    #dfe4e9 86%,
-    #ffffff 100%
+    rgba(250, 251, 252, 0.97) 0%,
+    rgba(228, 234, 239, 0.97) 100%
   );
 }
 
@@ -133,8 +143,19 @@ textarea {
   background-image: var(--gradient-chrome-text);
   background-clip: text;
   color: transparent;
+  /* The outline is what keeps the light upper half of each glyph from
+     dissolving into a pale background. */
+  -webkit-text-stroke: 0.6px rgba(45, 52, 61, 0.55);
   filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.9))
     drop-shadow(0 2px 3px rgba(15, 23, 42, 0.35));
+}
+
+/* The dark band that makes `.chrome-text` legible on a pale page swallows
+   the glyphs on a dark panel, so keep those stops light. */
+.chrome-text-light {
+  background-image: var(--gradient-chrome);
+  -webkit-text-stroke: 0;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55));
 }
 
 /* A highlight that travels across the glyphs themselves. Layered above the
