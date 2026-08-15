@@ -64,13 +64,17 @@ export default function Home() {
   return (
     <>
       <NameModal isOpen={showModal} onSubmit={handleNameSubmit} />
-      <div className="flex h-screen bg-gray-50">
+      <div className="chrome-page flex h-screen">
         {/* Sidebar */}
-        <div className="hidden md:flex md:w-[260px] md:flex-col bg-gray-900">
-        <div className="flex h-full min-h-0 flex-col">
+        <div className="chrome-surface-dark chrome-bevel-dark relative hidden md:flex md:w-[260px] md:flex-col">
+          {/* Bright edge where the panel catches the light */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-white/50 via-white/10 to-white/40" />
           <div className="flex h-full min-h-0 flex-col">
+            <div className="px-4 pt-5">
+              <span className="chrome-text text-lg font-semibold tracking-tight">DylGPT</span>
+            </div>
             <div className="p-4">
-              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-white border-opacity-20 p-3 text-sm text-white transition-colors hover:bg-gray-700">
+              <button className="chrome-surface chrome-bevel chrome-sheen mb-2 flex w-full items-center justify-center gap-3 rounded-full p-3 text-sm font-medium text-gray-900 transition-transform duration-150 hover:-translate-y-px active:translate-y-0">
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -85,13 +89,12 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main content */}
-      <div className="flex flex-1 flex-col">
-        <ChatInterface messages={messages} onSendMessage={sendMessage} isLoading={isLoading} />
+        {/* Main content */}
+        <div className="flex flex-1 flex-col">
+          <ChatInterface messages={messages} onSendMessage={sendMessage} isLoading={isLoading} />
+        </div>
       </div>
-    </div>
     </>
   );
 }
