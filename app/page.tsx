@@ -64,13 +64,13 @@ export default function Home() {
   return (
     <>
       <NameModal isOpen={showModal} onSubmit={handleNameSubmit} />
-      <div className="flex h-screen bg-gray-50">
+      <div className="flex h-screen bg-background">
         {/* Sidebar */}
-        <div className="hidden md:flex md:w-[260px] md:flex-col bg-gray-900">
+        <div className="hidden md:flex md:w-[260px] md:flex-col bg-surface-chrome">
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex h-full min-h-0 flex-col">
             <div className="p-4">
-              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-white border-opacity-20 p-3 text-sm text-white transition-colors hover:bg-gray-700">
+              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-border p-3 text-sm text-foreground transition-colors hover:bg-surface-panel">
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
