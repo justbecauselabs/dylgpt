@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import twilio from 'twilio'
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID
-const authToken = process.env.TWILIO_AUTH_TOKEN
-const twilioNumber = process.env.TWILIO_NUMBER
-const recipientNumber = process.env.RECIPIENT_NUMBER
-
-if (!accountSid || !authToken || !twilioNumber || !recipientNumber) {
-  throw new Error('Missing required environment variables: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER, RECIPIENT_NUMBER')
-}
-
-const client = twilio(accountSid, authToken)
-
 export async function POST(request: NextRequest) {
+  const accountSid = process.env.TWILIO_ACCOUNT_SID
+  const authToken = process.env.TWILIO_AUTH_TOKEN
+  const twilioNumber = process.env.TWILIO_NUMBER
+  const recipientNumber = process.env.RECIPIENT_NUMBER
+
+  if (!accountSid || !authToken || !twilioNumber || !recipientNumber) {
+    console.error('Missing required environment variables: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER, RECIPIENT_NUMBER')
+    return NextResponse.json(
+      { error: 'SMS service is not configured' },
+      { status: 500 }
+    )
+  }
+
   try {
     const { message, userName } = await request.json()
 
@@ -27,10 +29,11 @@ export async function POST(request: NextRequest) {
       ? `DylGPT: ${userName} says: ${message}`
       : `DylGPT: ${message}`;
 
+    const client = twilio(accountSid, authToken)
     const result = await client.messages.create({
       body: smsBody,
-      from: twilioNumber as string,
-      to: recipientNumber as string,
+      from: twilioNumber,
+      to: recipientNumber,
     })
 
     return NextResponse.json({ success: true, messageId: result.sid })
