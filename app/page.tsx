@@ -64,13 +64,13 @@ export default function Home() {
   return (
     <>
       <NameModal isOpen={showModal} onSubmit={handleNameSubmit} />
-      <div className="flex h-screen bg-gray-50">
+      <div className="flex h-screen bg-mist">
         {/* Sidebar */}
-        <div className="hidden md:flex md:w-[260px] md:flex-col bg-gray-900">
+        <div className="hidden md:flex md:w-[260px] md:flex-col bg-sidebar border-r border-gold/20">
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex h-full min-h-0 flex-col">
             <div className="p-4">
-              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-white border-opacity-20 p-3 text-sm text-white transition-colors hover:bg-gray-700">
+              <button className="mb-2 flex w-full items-center justify-center gap-3 rounded-md border border-gold/50 p-3 text-sm text-gold transition-colors hover:bg-sidebar-hover">
                 <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" xmlns="http://www.w3.org/2000/svg">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -82,6 +82,9 @@ export default function Home() {
               <nav className="flex h-full flex-col px-3 pb-3.5">
                 <div className="flex-1"></div>
               </nav>
+            </div>
+            <div className="border-t border-gold/20 px-4 py-4 text-sm font-semibold tracking-wide text-gold">
+              DylGPT
             </div>
           </div>
         </div>
